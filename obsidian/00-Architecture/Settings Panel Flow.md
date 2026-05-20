@@ -30,6 +30,20 @@ Clicking a sidebar button writes `SettingsTab` and refreshes; the refreshed skin
 widget appearance write through the [[Settings Persistence Flow]] and refresh the
 `Monterey` skin group so widgets pick up the change.
 
+## Background panel layering
+
+Rainmeter draws meters in `@Include` order — meters from an earlier `@Include` render
+*behind* those from a later one. The settings window's background panels —
+`[Container]`, `[SidebarMeter]` (×2, one per effect mode), `[RightHalfMeter]`,
+`[RightBottomMeter]` — therefore live at the end of `Sidebar.inc` (`@Include2`), **not**
+in `Settings.ini`'s body, so they sit behind the tab content (`@Include5`). `[TabTitle]`
+and `[Line]` stay in `Settings.ini` and draw last, on top.
+
+> [!warning] Gotcha
+> Moving those panel meters into `Settings.ini`'s own body makes them render *after*
+> (on top of) the tab content and washes it out on every tab — the dimming bug fixed in
+> `dee177a`.
+
 ## Depends on
 
 - [[Settings Tab Dispatch]]
