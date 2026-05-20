@@ -5,3 +5,7 @@ obsidian/.obsidian/workspaces.json
 obsidian/.obsidian/cache
 obsidian/.trash/
 obsidian/_Attachments/
+
+# Local secrets — real API keys, never committed.
+# Copy @Resources/Variables/Secrets.inc.example to Secrets.inc and add your key.
+@Resources/Variables/Secrets.inc

@@ -73,7 +73,7 @@ So **theme, size, and language are all selected by variables** (`Theme`, `Widget
 
 ## Weather widget specifics
 
-Weather uses the free **Open-Meteo** API — no key required. The `APIKey` still present in `@Resources/Variables/Weather.inc` is dead from a previous provider; do not rely on it.
+Weather uses the free **Open-Meteo** API — no key required. `@Resources/Variables/Weather.inc` keeps an empty `APIKey` variable that nothing in the skin currently reads. Secrets (API keys) belong in `@Resources/Variables/Secrets.inc` — a **gitignored** local-override file `@Include`d at the end of `Weather.inc`; copy the tracked `Secrets.inc.example` to create it. Its `APIKey=` overrides the empty default.
 
 - Forecast: `OpenMeteoParser` (WebParser) calls `api.open-meteo.com/v1/forecast`.
 - City search: `UpdateCity` (in `Widgets/Weather/Settings.ini`) calls `geocoding-api.open-meteo.com` and writes the resolved `Latitude`/`Longitude`/`City` back into `Variables/Weather.inc`.
