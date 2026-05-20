@@ -40,7 +40,7 @@ Y=(55+35)
 [Widget1Opened]
 Measure=Plugin
 Plugin=ConfigActive
-ConfigName=Monterey\Widgets\Clock
+ConfigName=#ROOTCONFIG#\Widgets\Clock
 UpdateDivider=1
 OnChangeAction=[!Refresh]
 
@@ -52,7 +52,7 @@ Y=(88)
 X=(#WidgetWidth# - 30 - 40)
 Hidden=([&Widget1Opened:] <> -1)
 DynamicVariables=1
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Clock" "#ClockWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Clock" "#ClockWidgetSize#.ini"]
 
 [Widget1True]
 Meter=Shape
@@ -62,7 +62,7 @@ Y=(88)
 X=(#WidgetWidth# - 30 - 40)
 Hidden=([&Widget1Opened:] <> 1)
 DynamicVariables=1
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Clock" "#ClockWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Clock" "#ClockWidgetSize#.ini"]
 
 [Line1]
 Meter=Shape
@@ -83,7 +83,7 @@ Y=(55+85)
 [Widget2Opened]
 Measure=Plugin
 Plugin=ConfigActive
-ConfigName=Monterey\Widgets\Calendar
+ConfigName=#ROOTCONFIG#\Widgets\Calendar
 UpdateDivider=1
 OnChangeAction=[!Refresh]
 
@@ -92,14 +92,14 @@ Meter=Shape
 MeterStyle=Widget1False
 Y=(138)
 Hidden=([&Widget2Opened:] <> -1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Calendar" "#CalendarWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Calendar" "#CalendarWidgetSize#.ini"]
 
 [Widget2True]
 Meter=Shape
 MeterStyle=Widget1True
 Y=(138)
 Hidden=([&Widget2Opened:] <> 1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Calendar" "#CalendarWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Calendar" "#CalendarWidgetSize#.ini"]
 
 [Line2]
 Meter=Shape
@@ -120,7 +120,7 @@ Y=(45+145)
 [Widget3Opened]
 Measure=Plugin
 Plugin=ConfigActive
-ConfigName=Monterey\Widgets\Monitor
+ConfigName=#ROOTCONFIG#\Widgets\Monitor
 UpdateDivider=1
 OnChangeAction=[!Refresh]
 
@@ -129,14 +129,14 @@ Meter=Shape
 MeterStyle=Widget1False
 Y=(188)
 Hidden=([&Widget3Opened:] <> -1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Monitor" "#MonitorWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Monitor" "#MonitorWidgetSize#.ini"]
 
 [Widget3True]
 Meter=Shape
 MeterStyle=Widget1True
 Y=(188)
 Hidden=([&Widget3Opened:] <> 1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Monitor" "#MonitorWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Monitor" "#MonitorWidgetSize#.ini"]
 
 [Line3]
 Meter=Shape
@@ -157,7 +157,7 @@ Y=(45+195)
 [Widget4Opened]
 Measure=Plugin
 Plugin=ConfigActive
-ConfigName=Monterey\Widgets\Weather
+ConfigName=#ROOTCONFIG#\Widgets\Weather
 UpdateDivider=1
 OnChangeAction=[!Refresh]
 
@@ -166,14 +166,14 @@ Meter=Shape
 MeterStyle=Widget1False
 Y=(238)
 Hidden=([&Widget4Opened:] <> -1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Weather" "#WeatherWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Weather" "#WeatherWidgetSize#.ini"]
 
 [Widget4True]
 Meter=Shape
 MeterStyle=Widget1True
 Y=(238)
 Hidden=([&Widget4Opened:] <> 1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Weather" "#WeatherWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Weather" "#WeatherWidgetSize#.ini"]
 
 [Line4]
 Meter=Shape
@@ -194,7 +194,7 @@ Y=(45+245)
 [Widget5Opened]
 Measure=Plugin
 Plugin=ConfigActive
-ConfigName=Monterey\Widgets\Notes
+ConfigName=#ROOTCONFIG#\Widgets\Notes
 UpdateDivider=1
 OnChangeAction=[!Refresh]
 
@@ -203,14 +203,14 @@ Meter=Shape
 MeterStyle=Widget1False
 Y=(288)
 Hidden=([&Widget5Opened:] <> -1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Notes" "#NotesWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Notes" "#NotesWidgetSize#.ini"]
 
 [Widget5True]
 Meter=Shape
 MeterStyle=Widget1True
 Y=(288)
 Hidden=([&Widget5Opened:] <> 1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Notes" "#NotesWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Notes" "#NotesWidgetSize#.ini"]
 
 [Line5]
 Meter=Shape
@@ -231,7 +231,7 @@ Y=(45+295)
 [Widget6Opened]
 Measure=Plugin
 Plugin=ConfigActive
-ConfigName=Monterey\Widgets\Reminders
+ConfigName=#ROOTCONFIG#\Widgets\Reminders
 UpdateDivider=1
 OnChangeAction=[!Refresh]
 
@@ -240,14 +240,14 @@ Meter=Shape
 MeterStyle=Widget1False
 Y=(338)
 Hidden=([&Widget6Opened:] <> -1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Reminders" "#RemindersWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Reminders" "#RemindersWidgetSize#.ini"]
 
 [Widget6True]
 Meter=Shape
 MeterStyle=Widget1True
 Y=(338)
 Hidden=([&Widget6Opened:] <> 1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Reminders" "#RemindersWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Reminders" "#RemindersWidgetSize#.ini"]
 
 [Line6]
 Meter=Shape
@@ -268,7 +268,7 @@ Y=(45+345)
 [Widget7Opened]
 Measure=Plugin
 Plugin=ConfigActive
-ConfigName=Monterey\Widgets\Music
+ConfigName=#ROOTCONFIG#\Widgets\Music
 UpdateDivider=1
 OnChangeAction=[!Refresh]
 
@@ -277,14 +277,14 @@ Meter=Shape
 MeterStyle=Widget1False
 Y=(388)
 Hidden=([&Widget7Opened:] <> -1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Music" "#MusicWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Music" "#MusicWidgetSize#.ini"]
 
 [Widget7True]
 Meter=Shape
 MeterStyle=Widget1True
 Y=(388)
 Hidden=([&Widget7Opened:] <> 1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Music" "#MusicWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Music" "#MusicWidgetSize#.ini"]
 
 [Line7]
 Meter=Shape
@@ -305,7 +305,7 @@ Y=(45+395)
 [Widget8Opened]
 Measure=Plugin
 Plugin=ConfigActive
-ConfigName=Monterey\Widgets\Volume
+ConfigName=#ROOTCONFIG#\Widgets\Volume
 UpdateDivider=1
 OnChangeAction=[!Refresh]
 
@@ -314,14 +314,14 @@ Meter=Shape
 MeterStyle=Widget1False
 Y=(438)
 Hidden=([&Widget8Opened:] <> -1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Volume" "#VolumeWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Volume" "#VolumeWidgetSize#.ini"]
 
 [Widget8True]
 Meter=Shape
 MeterStyle=Widget1True
 Y=(438)
 Hidden=([&Widget8Opened:] <> 1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Volume" "#VolumeWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Volume" "#VolumeWidgetSize#.ini"]
 
 [Line8]
 Meter=Shape
@@ -342,7 +342,7 @@ Y=(45+445)
 [Widget9Opened]
 Measure=Plugin
 Plugin=ConfigActive
-ConfigName=Monterey\Widgets\Timer
+ConfigName=#ROOTCONFIG#\Widgets\Timer
 UpdateDivider=1
 OnChangeAction=[!Refresh]
 
@@ -351,12 +351,12 @@ Meter=Shape
 MeterStyle=Widget1False
 Y=(488)
 Hidden=([&Widget9Opened:] <> -1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Timer" "#TimerWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Timer" "#TimerWidgetSize#.ini"]
 
 [Widget9True]
 Meter=Shape
 MeterStyle=Widget1True
 Y=(488)
 Hidden=([&Widget9Opened:] <> 1)
-LeftMouseUpAction=[!ToggleConfig "Monterey\Widgets\Timer" "#TimerWidgetSize#.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Timer" "#TimerWidgetSize#.ini"]
 

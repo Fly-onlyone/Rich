@@ -1,0 +1,7 @@
+# Obsidian per-user state (vault content + shared .obsidian/ config IS tracked)
+obsidian/.obsidian/workspace.json
+obsidian/.obsidian/workspace-mobile.json
+obsidian/.obsidian/workspaces.json
+obsidian/.obsidian/cache
+obsidian/.trash/
+obsidian/_Attachments/

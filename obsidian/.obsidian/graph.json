@@ -1,0 +1,31 @@
+{
+  "collapse-filter": false,
+  "search": "",
+  "showTags": true,
+  "showAttachments": false,
+  "hideUnresolved": false,
+  "showOrphans": true,
+  "collapse-color-groups": false,
+  "colorGroups": [
+    { "query": "path:00-Architecture", "color": { "a": 1, "rgb": 8141549 } },
+    { "query": "path:01-Widgets",      "color": { "a": 1, "rgb": 2450411 } },
+    { "query": "path:02-Framework",    "color": { "a": 1, "rgb": 366185 } },
+    { "query": "path:03-Extras",       "color": { "a": 1, "rgb": 14251782 } },
+    { "query": "path:04-Integrations", "color": { "a": 1, "rgb": 561586 } },
+    { "query": "path:05-Patterns",     "color": { "a": 1, "rgb": 14362487 } },
+    { "query": "path:06-Operations",   "color": { "a": 1, "rgb": 13273604 } },
+    { "query": "path:07-Glossary",     "color": { "a": 1, "rgb": 6583435 } }
+  ],
+  "collapse-display": false,
+  "showArrow": true,
+  "textFadeMultiplier": 0,
+  "nodeSizeMultiplier": 1.2,
+  "lineSizeMultiplier": 1.1,
+  "collapse-forces": false,
+  "centerStrength": 0.518,
+  "repelStrength": 11.5,
+  "linkStrength": 1,
+  "linkDistance": 250,
+  "scale": 1,
+  "close": false
+}

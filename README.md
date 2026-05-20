@@ -2,7 +2,7 @@
 
 <div align="center">
   A MacOS style widget pack for Windows
-  
+
   Inspired by [Big Sur for Rainmeter](https://www.deviantart.com/fediafedia/art/Big-Sur-RC1-for-Rainmeter-846882462)
 </div>
 
@@ -17,7 +17,8 @@
 ### [User guide](https://github.com/creewick/MontereyRainmeter/wiki/User-guide)
 ### [Performance Index](https://github.com/creewick/MontereyRainmeter/wiki/Performance-Index)
 ### [Documentation](https://github.com/creewick/MontereyRainmeter/wiki/Documentation)
-  
+> 🛠 **Contributors:** in-repo developer docs live in [`obsidian/`](./obsidian/_HOME.md) — a graph-linked Obsidian vault. Open the folder as a vault, or browse the markdown directly.
+
 
 ## What will you get
 
@@ -38,7 +39,7 @@ We have 9 widgets available
 |<img src="@Resources/Images/Icons/Notes.png" />|**Notes**|Gives you a quick access to your most important text information|
 |<img src="@Resources/Images/Icons/Reminders.png" />|**Reminders**|A basic to-do list with counter|
 |<img src="@Resources/Images/Icons/Timer.png" />|**Timer**|A basic countdown with an alarm sound|
-  
+
 <img src="@Resources/Images/Banners/sizes.png" width="500px" align="right" />
 
 ### Sizes
@@ -54,13 +55,13 @@ Each widget comes in 4 sizes, you can switch between them in the context menu
 
 ### Themes
 
-Widgets appears in one of 5 predefined themes
+Widgets can use built-in color palettes and a separate visual effect.
 
-|Light|Dark|Auto|Color|Blur *|
-|-|-|-|-|-|
-|<img src="@Resources/Images/Settings/light.png" />|<img src="@Resources/Images/Settings/dark.png" />|<img src="@Resources/Images/Settings/auto.png" />|<img src="@Resources/Images/Settings/color.png" />|<img src="@Resources/Images/Settings/blur.png" />|
+|Palettes|Effects|
+|-|-|
+|Light, Dark, Dracula, Catppuccin, Solarized, Nord, Gruvbox, Tokyo Night, One Dark, Monokai, Rose Pine, Everforest, Cyberpunk|Solid, Auto, Wallpaper, Blur *|
 
-_* Currently works well only on Windows 11_
+_* Blur currently works well only on Windows 11_
 ### Languages
 
 So far we support 4 languages

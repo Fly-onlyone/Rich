@@ -57,7 +57,7 @@ DynamicVariables=1
 [BatteryAutoOpened]
 Measure=Plugin
 Plugin=ConfigActive
-ConfigName=Monterey\Extras\AutoLowPowerMode
+ConfigName=#ROOTCONFIG#\Extras\AutoLowPowerMode
 UpdateDivider=1
 OnChangeAction=[!Refresh]
 
@@ -69,7 +69,7 @@ Y=(123)
 X=(#WidgetWidth# - 30 - 40)
 Hidden=([&BatteryAutoOpened:] <> -1)
 DynamicVariables=1
-LeftMouseUpAction=[!ToggleConfig "Monterey\Extras\AutoLowPowerMode" "AutoLowPowerMode.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Extras\AutoLowPowerMode" "AutoLowPowerMode.ini"]
 
 [BatteryAutoTrue]
 Meter=Shape
@@ -79,7 +79,7 @@ Y=(123)
 X=(#WidgetWidth# - 30 - 40)
 Hidden=([&BatteryAutoOpened:] <> 1)
 DynamicVariables=1
-LeftMouseUpAction=[!ToggleConfig "Monterey\Extras\AutoLowPowerMode" "AutoLowPowerMode.ini"]
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Extras\AutoLowPowerMode" "AutoLowPowerMode.ini"]
 
 [BatteryHelp]
 Meter=String

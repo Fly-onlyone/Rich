@@ -1,0 +1,17 @@
+{
+  "alwaysUpdateLinks": true,
+  "newLinkFormat": "shortest",
+  "useMarkdownLinks": false,
+  "showLineNumber": true,
+  "readableLineLength": false,
+  "strictLineBreaks": false,
+  "showFrontmatter": true,
+  "foldHeading": true,
+  "foldIndent": true,
+  "useTab": true,
+  "tabSize": 2,
+  "defaultViewMode": "source",
+  "livePreview": true,
+  "spellcheck": false,
+  "attachmentFolderPath": "_Attachments"
+}
