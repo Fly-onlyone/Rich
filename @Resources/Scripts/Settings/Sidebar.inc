@@ -167,3 +167,38 @@ Meter=Image
 MeterStyle=WidgetsIcon
 ImageName=#@#Images\Settings\About.png
 Y=(29+30*9.5)
+
+; --- Window background panels ---
+; Defined here (an early @Include) so they render BEHIND the tab content,
+; which Settings.ini pulls in later via @Include5.
+
+[Container]
+Meter=Shape
+DynamicVariables=1
+Shape=Rectangle 0, 0, #WidgetWidth#, #WidgetHeight#, #WidgetRadius#, #WidgetRadius# | Fill Color 000000 | StrokeWidth 0.5 | Stroke Color 808080
+
+[SidebarMeter]
+Meter=Shape
+Container=Container
+Shape=Rectangle 0,0,#WidgetWidth#,#WidgetHeight# | Fill Color 80808060 | StrokeWidth 0.5 | Stroke Color 808080
+Hidden=([&EffectAsNumber] = 4)
+DynamicVariables=1
+
+[SidebarMeter]
+Meter=Shape
+Container=Container
+Shape=Rectangle 0,0,#WidgetWidth#,#WidgetHeight# | Fill Color #BackgroundColor#60 | StrokeWidth 0.5 | Stroke Color 808080
+Hidden=([&EffectAsNumber] <> 4)
+DynamicVariables=1
+
+[RightHalfMeter]
+Meter=Shape
+Container=Container
+Shape=Rectangle #SidebarWidth#,0,(#WidgetWidth#-#SidebarWidth#),#WidgetHeight# | Fill Color #BackgroundColor#d0 | StrokeWidth 0.5 | Stroke Color 808080
+DynamicVariables=1
+
+[RightBottomMeter]
+Meter=Shape
+Container=Container
+Shape=Rectangle #SidebarWidth#,55,(#WidgetWidth#-#SidebarWidth#),#WidgetHeight# | Fill Color #ForegroundColor#10 | StrokeWidth 0
+DynamicVariables=1
