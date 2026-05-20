@@ -12,13 +12,13 @@ tags: [framework, includes]
 
 ## How it works
 
-`Widget.inc` defines the `[Rainmeter]` section: it joins the `Monterey` [[Section]] group, disables auto-update (`DefaultUpdateDivider=-1`), and binds `RightMouseUpAction` to set the `Context` [[Variable]] and open the [[Bang]]-driven custom menu. It draws `[BackgroundMeter]`, a rounded [[Shape Meter]] sized by `WidgetWidth`/`WidgetHeight`/`WidgetRadius`.
+`Widget.inc` defines the `[Rainmeter]` section: it joins the `Monterey` [[Section]] group, disables auto-update (`DefaultUpdateDivider=-1`), and binds `RightMouseUpAction` to set the `Context` [[Variable]] and open the [[Bang]]-driven custom menu. It draws `[BackgroundMeter]`, a rounded [[Shape Meter]] sized by `WidgetWidth`/`WidgetHeight`/`WidgetRadius`. An `[OpacityValue]` Calc [[Measure]] reads the global `WidgetOpacity` percentage, clamps it to 10–100%, scales it to a 0–255 alpha, and applies it to the whole skin window with `!SetTransparency` on every load/refresh — so each widget fades uniformly while the settings panel and popups (which use other scaffolds) stay opaque.
 
 Its `[Variables]` block runs the cascade: `@Include` pulls [[Global Variables]], then the localized Widget file, the active theme, the active size, [[Context Scaffold]], and the per-widget context. It also defines `WidgetPadding`, `WidgetRadius`, `WidgetCenterX`, and `WidgetCenterY`.
 
 ## Depends on
 
-- [[Global Variables]] — supplies `PaddingBase`/`RadiusBase` and theme defaults
+- [[Global Variables]] — supplies `PaddingBase`/`RadiusBase`, `WidgetOpacity`, and theme defaults
 - [[Size Definitions]] — supplies `WidgetWidth`/`WidgetHeight`
 - [[Context Scaffold]] — wires the right-click menu
 

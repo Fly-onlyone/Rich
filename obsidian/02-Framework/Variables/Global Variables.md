@@ -14,7 +14,7 @@ tags: [framework, variables]
 
 `Global.inc` is the root of the [[Include Cascade Pattern]] — every scaffold `@Include`s it before anything else. It declares:
 
-- **Appearance state** — `Palette` (default `Light`), `Theme` as the effect selector (default `Blur`), `DarkMode`, `BatterySaverMode`, and the `DarkThemeFrom`/`DarkThemeTo` schedule (`23:00`–`09:00`).
+- **Appearance state** — `Palette` (default `Light`), `Theme` as the effect selector (default `Blur`), `DarkMode`, `BatterySaverMode`, the `DarkThemeFrom`/`DarkThemeTo` schedule (`23:00`–`09:00`), and `WidgetOpacity` (whole-widget transparency percent, default `100` — see [[Widget Scaffold]]).
 - **Colors** — light/dark/wallpaper-effect background and foreground hex values plus `GrayColor`; popular fixed palettes live under `Scripts/Palettes/`.
 - **Sizing** — `WidgetBase`, `PaddingBase`, `RadiusBase` (see [[WidgetBase Grid Unit]]).
 - **Locale** — `Language` (`en`), `Units` (`celsius`), `FontFace` (`SF Pro Display`).
