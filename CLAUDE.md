@@ -39,14 +39,15 @@ Widgets/<Name>/<Size>.ini
 `Widget.inc` in turn pulls in the global layer:
 
 ```
-@Resources/Variables/Global.inc               skin-wide defaults (Theme, Language, Units...)
-@Resources/Scripts/Themes/<Theme>.inc          active theme -> sets Background/ForegroundColor
+@Resources/Variables/Global.inc               skin-wide defaults (Palette, Theme, Language, Units...)
+@Resources/Scripts/Palettes/<Palette>.inc      active colour scheme -> sets Palette{Background,Foreground,Accent}Color
+@Resources/Scripts/Themes/<Theme>.inc          active effect -> resolves Background/ForegroundColor
 @Resources/Scripts/Sizes/<WidgetSize>.inc      active size  -> sets WidgetWidth/WidgetHeight
 @Resources/Languages/<lang>/Widget.inc         shared localized strings
 @Resources/Scripts/Includes/Context.inc + Scripts/Contexts/Widget.inc   right-click menu
 ```
 
-So **theme, size, and language are all selected by variables** (`Theme`, `WidgetSize`, `Language`) and applied uniformly by swapping which include file is pulled in. To change behavior across every widget, edit the shared include — not each widget. Note: `@IncludeN` numbers must be unique within a `[Variables]` section; a reused number silently overrides the earlier include.
+So **palette, effect, size, and language are all selected by variables** (`Palette`, `Theme`, `WidgetSize`, `Language`) and applied uniformly by swapping which include file is pulled in. To change behavior across every widget, edit the shared include — not each widget. Note: `@IncludeN` numbers must be unique within a `[Variables]` section; a reused number silently overrides the earlier include.
 
 ## Directory layout
 
@@ -54,7 +55,8 @@ So **theme, size, and language are all selected by variables** (`Theme`, `Widget
 - `@Resources/` — everything shared:
   - `Variables/` — per-widget default variables + `Global.inc` (skin-wide defaults) + `Layout.inc`. **Persisted settings live here** (see below).
   - `Scripts/Includes/` — shared scaffolds: `Widget.inc`, `Window.inc`, `Settings.inc`, `Context.inc`, `WhatsNew.inc`.
-  - `Scripts/Themes/` — `Light/Dark/Auto/Color/Blur.inc`; the active one is included by name.
+  - `Scripts/Palettes/` — color schemes (`Light`, `Dark`, `Dracula`, `Nord`, … 15 total); each defines `Palette{Background,Foreground,Accent}Color` + `PaletteDarkMode`.
+  - `Scripts/Themes/` — visual *effects* (`Solid/Auto/Color/Blur.inc`; `Light/Dark.inc` are legacy, unused); the active `Theme` is included by name.
   - `Scripts/Sizes/` — `Small/Medium/Wide/Large.inc`; define `WidgetWidth`/`WidgetHeight` from `WidgetBase`.
   - `Scripts/Widgets/` — per-widget logic: `.inc` (measures + meters) and `.lua` (Calendar, Reminders, Timer).
   - `Scripts/Contexts/` — right-click context-menu definitions.
@@ -66,7 +68,7 @@ So **theme, size, and language are all selected by variables** (`Theme`, `Widget
 ## Key conventions
 
 - **Settings persistence:** user choices are saved by writing them back into `@Resources/Variables/*.inc` with the `!WriteKeyValue` bang. In Lua this is the `setAndSave(variable, value)` helper, which writes the key *and* `!SetVariable`s it live. Editing those `Variables/*.inc` files changes the shipped defaults.
-- **Theming:** the `Theme` variable (default `Blur`) is mapped to a number by the recurring `[ThemeAsNumber]` String measure (`Light`→1 … `Blur`→5) for use in conditional `Hidden=` expressions. `Blur` is special — it uses the `FrostedGlass` plugin for the acrylic effect and the `Chameleon` plugin to auto-detect Windows light/dark mode.
+- **Theming — Palette + Effect + Accent:** two variables drive colour. `Palette` (default `Monokai`) selects a scheme file in `@Resources/Scripts/Palettes/`, each defining `PaletteBackgroundColor`, `PaletteForegroundColor`, `PaletteAccentColor`, and `PaletteDarkMode`. `Theme` (default `Blur`) selects a visual *effect* in `@Resources/Scripts/Themes/` (`Solid`/`Auto`/`Color`/`Blur`); the palette is `@Include`d **before** the effect, and the effect resolves the final `BackgroundColor`/`ForegroundColor`/`DarkMode` that meters consume. `Theme` is mapped to an integer by the recurring `[EffectAsNumber]` String measure (`Solid`→1, `Auto`→2, `Color`→3, `Blur`→4) for conditional `Hidden=` expressions. `PaletteAccentColor` is each scheme's signature hue — used directly (independent of effect) for the clock second hand and the calendar today-highlight. `Blur` uses the `FrostedGlass` plugin for the acrylic effect; `Auto`/`Color` use the `Chameleon` plugin (time-of-day schedule / wallpaper sampling).
 - **Layout math:** meters are positioned with expressions relative to `WidgetWidth`/`WidgetHeight` (e.g. `X=(#WidgetPadding# + #WidgetWidth# * 0.05)`), so one set of files works at all four sizes.
 - **Localization:** UI strings are token variables named `#t...#`, defined in `Languages/<lang>/...` and referenced via the nested form `[#t...#]`. Never hardcode display text.
 - **Group bangs:** measures/meters are tagged `Group=Measures` / `Group=Meters` so logic can refresh them wholesale with `!UpdateMeasureGroup` / `!UpdateMeterGroup`. Every skin's `[Rainmeter]` section is also tagged `Group=Monterey`: a settings write that must reach the running widgets persists with `!WriteKeyValue` and then reloads them with **`!RefreshGroup Monterey`** (reloads every pack skin — widgets *and* the settings panel). Use `!RefreshGroup Monterey`, **not** `!RefreshApp` — `!RefreshApp` does not reliably reload the already-loaded widget configs, so a theme/size change would update only the settings panel.

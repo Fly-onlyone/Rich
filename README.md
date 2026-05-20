@@ -55,11 +55,11 @@ Each widget comes in 4 sizes, you can switch between them in the context menu
 
 ### Themes
 
-Widgets can use built-in color palettes and a separate visual effect.
+Widgets can use built-in color palettes and a separate visual effect. Each palette also carries its own signature **accent color** — used for the clock's second hand and the calendar's current-day highlight — so the themes stay visually distinct.
 
 |Palettes|Effects|
 |-|-|
-|Light, Dark, Dracula, Catppuccin, Solarized, Nord, Gruvbox, Tokyo Night, One Dark, Monokai, Rose Pine, Everforest, Cyberpunk|Solid, Auto, Wallpaper, Blur *|
+|Light, Dark, Dracula, Catppuccin, Solarized, Nord, Gruvbox, Tokyo Night, One Dark, Monokai, Rose Pine, Everforest, Cyberpunk, Emerald, Ocean|Solid, Auto, Wallpaper, Blur *|
 
 _* Blur currently works well only on Windows 11_
 ### Languages

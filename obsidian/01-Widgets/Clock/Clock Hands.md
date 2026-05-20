@@ -13,7 +13,7 @@ tags: [widgets, clock]
 
 ## How it works
 
-A single `[Time]` measure runs `OnUpdateAction` bangs that compute three angle variables from the section's seconds value using modulo arithmetic: `SecondsAngle = (sec % 60) * 6`, `MinutesAngle = (sec % 3600) / 10`, and `HoursAngle = (sec % 43200) / 120`. Each hand is a [[Shape Meter]] that unions a counterweight rectangle with a pointer rectangle, then applies `Combine ... | Rotate <angle>,centerX,centerY`. Hand thickness and length come from proportional variables (`ClockhandWidth`, `HourHandHeight`, etc.). Hands recolor with dark mode via `#ForegroundColor#`; the second hand is fixed orange (`ff9900`).
+A single `[Time]` measure runs `OnUpdateAction` bangs that compute three angle variables from the section's seconds value using modulo arithmetic: `SecondsAngle = (sec % 60) * 6`, `MinutesAngle = (sec % 3600) / 10`, and `HoursAngle = (sec % 43200) / 120`. Each hand is a [[Shape Meter]] that unions a counterweight rectangle with a pointer rectangle, then applies `Combine ... | Rotate <angle>,centerX,centerY`. Hand thickness and length come from proportional variables (`ClockhandWidth`, `HourHandHeight`, etc.). Hands recolor with dark mode via `#ForegroundColor#`; the second hand uses the active palette's signature `#PaletteAccentColor#` (see [[Theme System]]).
 
 ## Depends on
 
