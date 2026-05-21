@@ -4,7 +4,7 @@ tags: [widgets, monitor]
 
 # Monitor Gauge Animation
 
-> An ActionTimer-driven easing loop that smoothly moves each Monitor gauge from its old value toward the newest reading instead of snapping.
+> Each Monitor gauge snaps straight to its newest reading. An ActionTimer easing path also exists but is disabled.
 
 ## Source
 
@@ -12,32 +12,25 @@ tags: [widgets, monitor]
 
 ## How it works
 
-```mermaid
-flowchart LR
-  M[CPURounded changes] -->|OnChangeAction| S[Stop + Execute CPUAnimation]
-  S --> A[ActionTimer ActionList1: Repeat AddStep]
-  A -->|AddStep x N| V[CPUValue += halfway to target]
-  V --> U[Update CPUMeasure -> gauge]
-  A --> F[ActionList2: Update -> snap to exact]
-```
+When a `Rounded` [[Measure]] changes, its `OnChangeAction` stops then re-executes the metric's [[ActionTimer Plugin]] measure with `[&ActionList]`. The `[ActionList]` [[Measure]] is fixed to `2`, so the ActionTimer always runs `ActionList2=Update` — which sets `#CPUValue#` straight to the new `CPURounded` value and updates the gauge `Calc` measure (`CPUMeasure`). The gauge therefore **snaps** to each reading with no delay. `OnRefreshAction` kicks all four on skin load.
 
-Each metric has an [[ActionTimer Plugin]] measure. When the `Rounded` [[Measure]] changes, its `OnChangeAction` stops then re-executes the animation `ActionList`. `AddStep` nudges the `#CPUValue#` variable halfway toward the target each step (`Value + (target - Value)/2`); a final `Update` snaps it exactly. The gauge `Calc` measure (`CPUMeasure`) reads `#CPUValue#`.
+## Easing (disabled)
 
-The `[ActionList]` [[Measure]] resolves to `1 + #BatterySaverMode#`, so the easing runs one pass normally and two in saver mode. `OnRefreshAction` kicks all four animations on skin load.
+`ActionList1=Repeat AddStep, 100, 10` is an easing path: `AddStep` would nudge `#CPUValue#` halfway toward the target every 100 ms for ten steps, gliding the gauge over ~1 s. It is **off** because `[ActionList]` resolves to `2` (snap), not `1` (ease). Easing made the displayed number trail real usage by up to a second, so it was disabled. To restore it, set `[ActionList]` `Formula=1` (or `1 + #BatterySaverMode#` for the original saver-aware behaviour).
 
 ## Depends on
 
-- [[ActionTimer Plugin]] — runs the stepped [[Bang]] list
+- [[ActionTimer Plugin]] — runs the `Update` / `AddStep` [[Bang]] lists
 - [[Monitor Metrics]] — supplies the `Rounded` target values
-- [[DynamicVariables Pattern]] — `#...Value#` must re-resolve each step
+- [[DynamicVariables Pattern]] — `#...Value#` must re-resolve when set
 
 ## Used by
 
-- [[Monitor Widget]] — gauges/histograms render the eased value
+- [[Monitor Widget]] — gauges/histograms render the value
 
 ## Gotchas
 
-- Stop-then-Execute on every change cancels any in-flight animation so rapid updates don't queue up.
+- Stop-then-Execute on every change cancels any in-flight run so rapid updates don't queue up.
 
 ## See also
 
