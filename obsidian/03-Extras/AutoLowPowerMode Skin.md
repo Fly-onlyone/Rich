@@ -12,12 +12,12 @@ tags: [extras]
 ## How it works
 The skin is invisible: it has only a `[DummyMeter]` and a single `[PowerState]` [[Measure]]. That measure uses the [[PowerPlugin]] with `PowerState=ACLine`, returning `1` on AC power and `0` on battery, polled every 60 updates.
 
-Its `OnChangeAction` runs `!WriteKeyValue` to persist `BatterySaverMode` as `(1-#CURRENTSECTION#)` into `@Resources/Variables/Global.inc`, then `!RefreshGroup Monterey` to reload every skin in the group. Because `BatterySaverMode` flips to `1` on battery, widgets like the [[Monitor Widget]] read it through their `UpdateDivider` expressions and slow down.
+Its `OnChangeAction` runs `!WriteKeyValue` to persist `BatterySaverMode` as `(1-#CURRENTSECTION#)` into `@Resources/Variables/Global.inc`, then `!RefreshGroup Rich` to reload every skin in the group. Because `BatterySaverMode` flips to `1` on battery, widgets like the [[Monitor Widget]] read it through their `UpdateDivider` expressions and slow down.
 
 ## Depends on
 - [[PowerPlugin]] — supplies the `ACLine` power state
 - [[Settings Persistence Pattern]] — persists `BatterySaverMode` to `Global.inc`
-- [[Group Bang Pattern]] — `!RefreshGroup Monterey` applies the change everywhere
+- [[Group Bang Pattern]] — `!RefreshGroup Rich` applies the change everywhere
 
 ## Used by
 - [[Battery Settings Tab]] — toggles this extra on or off

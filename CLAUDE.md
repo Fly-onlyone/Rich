@@ -4,9 +4,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-**Monterey for Rainmeter** — a macOS-style widget pack for Windows, built entirely as a [Rainmeter](https://www.rainmeter.net/) skin. There is **no compiler, build system, package manager, or test suite**. The repo is a tree of Rainmeter config files (`.ini` / `.inc`), Lua scripts, images, fonts, and localization files that Rainmeter loads and renders directly.
+**Rich for Rainmeter** — a macOS-style widget pack for Windows, built entirely as a [Rainmeter](https://www.rainmeter.net/) skin. There is **no compiler, build system, package manager, or test suite**. The repo is a tree of Rainmeter config files (`.ini` / `.inc`), Lua scripts, images, fonts, and localization files that Rainmeter loads and renders directly.
 
-The `.idea/` folder just means the repo was opened in IntelliJ — this is **not** a Java project; ignore those files (`palantir-java-format.xml` etc. are irrelevant). Upstream: `creewick/MontereyRainmeter`.
+The `.idea/` folder just means the repo was opened in IntelliJ — this is **not** a Java project; ignore those files (`palantir-java-format.xml` etc. are irrelevant). The pack is **Rich**, a rebrand of the upstream `creewick/MontereyRainmeter`.
 
 ## Documentation vault
 
@@ -51,7 +51,7 @@ So **palette, effect, size, and language are all selected by variables** (`Palet
 
 ## Directory layout
 
-- `Widgets/<Name>/` — one folder per widget (Clock, Calendar, Music, Weather, Monitor, Volume, Notes, Reminders, Timer). Each has four size files (`Small`/`Medium`/`Wide`/`Large.ini`), a `Settings.ini` (its settings-panel page), and `WhatsNew.ini` (changelog popup).
+- `Widgets/<Name>/` — one folder per widget (Clock, Calendar, Music, Weather, Monitor, Volume, Notes, Reminders, Timer, AIUsage). Each has four size files (`Small`/`Medium`/`Wide`/`Large.ini`), a `Settings.ini` (its settings-panel page), and `WhatsNew.ini` (changelog popup).
 - `@Resources/` — everything shared:
   - `Variables/` — per-widget default variables + `Global.inc` (skin-wide defaults) + `Layout.inc`. **Persisted settings live here** (see below).
   - `Scripts/Includes/` — shared scaffolds: `Widget.inc`, `Window.inc`, `Settings.inc`, `Context.inc`, `WhatsNew.inc`.
@@ -73,7 +73,7 @@ So **palette, effect, size, and language are all selected by variables** (`Palet
 - **Layout math:** meters are positioned with expressions relative to `WidgetWidth`/`WidgetHeight` (e.g. `X=(#WidgetPadding# + #WidgetWidth# * 0.05)`), so one set of files works at all four sizes.
 - **Widget opacity:** `WidgetOpacity` in `Global.inc` (percent, default `100`) sets the translucency of each widget's **background card only** — text, icons, and clock hands stay fully opaque. `Widget.inc`'s `[OpacityScript]` measure runs `Scripts/Includes/Opacity.lua`, which scales the effect's base background alpha (`255`, or `160` under `Blur` so the acrylic look survives at `100`%) by the percentage and writes a 2-hex `WidgetBackgroundAlpha` that the `[BackgroundMeter]` fill colour appends. `WidgetBackgroundAlpha` defaults to `ff` (`Global.inc`) / `a0` (`Blur.inc`) so popups and the settings panel keep their look. The Appearance tab's *Advanced Options* exposes the percentage beside Widget size/padding/radius.
 - **Localization:** UI strings are token variables named `#t...#`, defined in `Languages/<lang>/...` and referenced via the nested form `[#t...#]`. Never hardcode display text.
-- **Group bangs:** measures/meters are tagged `Group=Measures` / `Group=Meters` so logic can refresh them wholesale with `!UpdateMeasureGroup` / `!UpdateMeterGroup`. Every skin's `[Rainmeter]` section is also tagged `Group=Monterey`: a settings write that must reach the running widgets persists with `!WriteKeyValue` and then reloads them with **`!RefreshGroup Monterey`** (reloads every pack skin — widgets *and* the settings panel). Use `!RefreshGroup Monterey`, **not** `!RefreshApp` — `!RefreshApp` does not reliably reload the already-loaded widget configs, so a theme/size change would update only the settings panel.
+- **Group bangs:** measures/meters are tagged `Group=Measures` / `Group=Meters` so logic can refresh them wholesale with `!UpdateMeasureGroup` / `!UpdateMeterGroup`. Every skin's `[Rainmeter]` section is also tagged `Group=Rich`: a settings write that must reach the running widgets persists with `!WriteKeyValue` and then reloads them with **`!RefreshGroup Rich`** (reloads every pack skin — widgets *and* the settings panel). Use `!RefreshGroup Rich`, **not** `!RefreshApp` — `!RefreshApp` does not reliably reload the already-loaded widget configs, so a theme/size change would update only the settings panel.
 
 ## Weather widget specifics
 
@@ -83,3 +83,14 @@ Weather uses the free **Open-Meteo** API — no key required. `@Resources/Variab
 - City search: `UpdateCity` (in `Widgets/Weather/Settings.ini`) calls `geocoding-api.open-meteo.com` and writes the resolved `Latitude`/`Longitude`/`City` back into `Variables/Weather.inc`.
 - The forecast `RegExp` is one large positional pattern: it captures every JSON array element with the `#T#` capture-group macro, and downstream measures select values by hard-coded `StringIndex` offsets (current temp = 2; hourly temps start at 4; hourly weather codes at 34; daily lows at 64; daily highs at 70; daily icons at 76). **If you change which fields the API URL requests, every index offset must be recalculated** — this is the most common source of weather bugs.
 - WMO `weathercode` integers are mapped to icon names via the `IconName` substitution table in `Weather.inc`.
+
+## AI Usage widget specifics
+
+The **AIUsage** widget (`Widgets/AIUsage/`) shows how much of the **5-hour rolling** and **7-day** rate-limit budget **remains**, for **one provider at a time** — Codex or Claude. The active provider is the `Provider` variable in `Variables/AIUsage.inc`, switchable at runtime by clicking the provider name on the widget or via the right-click menu (`Scripts/Contexts/AIUsage.inc`). It draws two rounded `Shape` bars with a near-cap warning colour.
+
+- **Parser:** `@Resources/Scripts/Widgets/AIUsage.ps1` (PowerShell) reads both providers' live usage endpoints and writes a flat `@Resources/AIUsageData.txt` line. It is run by the **RunCommand** plugin — `[MeasureRun]` in `Scripts/Widgets/AIUsage.inc` — once on load and every `#AIUsageRefreshSeconds#` (default `900`). `RunCommand.dll` is **not** bundled with Rainmeter; it must be added to the `.rmskin` package.
+- **Read-back:** `[MeasureData]` (WebParser, `file://`) parses `AIUsageData.txt`; ten `Group=AIData` child measures + `Group=AICalc` `Calc` measures derive *remaining* (`100 − used`). Meters bind to the active provider via the nested `#Provider#` form (e.g. `MeasureName=Measure#Provider#5Left`, fill colour `[#[#Provider]5Color]`), re-resolved by the `!Refresh` a provider switch fires. No run/refresh loop.
+- **Codex:** live **account-wide** usage from `chatgpt.com/backend-api/wham/usage` (`rate_limit.primary_window`/`secondary_window` → `used_percent` + epoch `reset_at`), authenticating with the OAuth token from `~/.codex/auth.json` (`Bearer` + `chatgpt-account-id` header). Reflects the Codex CLI, IDE **and** cloud — the local `~/.codex/sessions` rollout files are a stale snapshot and are no longer used. Cached to `@Resources/AIUsage-codex-cache.json`; on failure the widget shows the cached value.
+- **Claude:** `AIUsage.ps1` reads **account-wide** usage live from Anthropic's undocumented `/api/oauth/usage` endpoint (`five_hour`/`seven_day` → `utilization` + ISO `resets_at`), authenticating with the OAuth token from `~/.claude/.credentials.json` (`Bearer` + `anthropic-beta: oauth-2025-04-20`). Reflects Claude Code, Claude Desktop **and** claude.ai web, and works with Claude Code closed. The endpoint 429s aggressively, so each good reading is cached to `@Resources/AIUsage-claude-cache.json` — while throttled the widget shows that cached value (reset countdowns re-derived from the stored timestamps). Only with no cache does Claude show unavailable (`MeasureActiveErr` → `ActiveErr`/`ActiveOk`). The widget reads the OAuth credential each refresh — a consideration before distributing the pack.
+- Threshold colours (`Green`/`Yellow`/`RedColor`, `YellowStarts`/`RedStarts`) live in `Variables/AIUsage.inc`, mirroring `Monitor.inc`. Colour keys off *used* %, so a near-empty *remaining* bar turns red.
+- Images in `@Resources/Images/AIUsage/`: `5h.png`/`7d.png` (30×30 monochrome, tinted with `#ForegroundColor#`) for the row windows; `Claude.png`/`Codex.png` (full-colour provider logos, **untinted**) shown before the name. Fonts and icon sizes scale with `#AIUsageFS#` — a per-size font scale set in each `Widgets/AIUsage/<Size>.ini`; `Wide` bumps it ×1.3 so its content isn't dwarfed by the wide canvas.

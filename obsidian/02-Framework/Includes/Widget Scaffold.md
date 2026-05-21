@@ -12,7 +12,7 @@ tags: [framework, includes]
 
 ## How it works
 
-`Widget.inc` defines the `[Rainmeter]` section: it joins the `Monterey` [[Section]] group, disables auto-update (`DefaultUpdateDivider=-1`), and binds `RightMouseUpAction` to set the `Context` [[Variable]] and open the [[Bang]]-driven custom menu. It draws `[BackgroundMeter]`, a rounded [[Shape Meter]] sized by `WidgetWidth`/`WidgetHeight`/`WidgetRadius`. An `[OpacityScript]` [[Measure]] runs `Scripts/Includes/Opacity.lua`, which turns the global `WidgetOpacity` percentage into a 2-hex `WidgetBackgroundAlpha` (scaled by the effect's base alpha — `160` under Blur, `255` otherwise) that `[BackgroundMeter]`'s fill colour appends — so opacity tints the background card only, leaving text and icons opaque.
+`Widget.inc` defines the `[Rainmeter]` section: it joins the `Rich` [[Section]] group, disables auto-update (`DefaultUpdateDivider=-1`), and binds `RightMouseUpAction` to set the `Context` [[Variable]] and open the [[Bang]]-driven custom menu. It draws `[BackgroundMeter]`, a rounded [[Shape Meter]] sized by `WidgetWidth`/`WidgetHeight`/`WidgetRadius`. An `[OpacityScript]` [[Measure]] runs `Scripts/Includes/Opacity.lua`, which turns the global `WidgetOpacity` percentage into a 2-hex `WidgetBackgroundAlpha` (scaled by the effect's base alpha — `160` under Blur, `255` otherwise) that `[BackgroundMeter]`'s fill colour appends — so opacity tints the background card only, leaving text and icons opaque.
 
 Its `[Variables]` block runs the cascade: `@Include` pulls [[Global Variables]], then the localized Widget file, the active theme, the active size, [[Context Scaffold]], and the per-widget context. It also defines `WidgetPadding`, `WidgetRadius`, `WidgetCenterX`, and `WidgetCenterY`.
 

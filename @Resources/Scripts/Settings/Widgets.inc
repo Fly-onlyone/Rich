@@ -1,5 +1,5 @@
 [Variables]
-WidgetHeight=550
+WidgetHeight=600
 @Include1=#@#Variables\Layout.inc
 @Include2=#@#Languages\#Language#\Widgets\Clock.inc
 @Include3=#@#Languages\#Language#\Widgets\Calendar.inc
@@ -10,10 +10,11 @@ WidgetHeight=550
 @Include8=#@#Languages\#Language#\Widgets\Music.inc
 @Include9=#@#Languages\#Language#\Widgets\Volume.inc
 @Include10=#@#Languages\#Language#\Widgets\Timer.inc
+@Include11=#@#Languages\#Language#\Widgets\AIUsage.inc
 
 [Widgets]
 Meter=Shape
-Shape=Rectangle 20,20,(#WidgetWidth# - #SidebarWidth# - 40),450,6 | Fill Color #ForegroundColor#05 | StrokeWidth 0
+Shape=Rectangle 20,20,(#WidgetWidth# - #SidebarWidth# - 40),500,6 | Fill Color #ForegroundColor#05 | StrokeWidth 0
 X=#SidebarWidth#
 Y=55
 DynamicVariables=1
@@ -359,4 +360,41 @@ MeterStyle=Widget1True
 Y=(488)
 Hidden=([&Widget9Opened:] <> 1)
 LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\Timer" "#TimerWidgetSize#.ini"]
+
+[Line9]
+Meter=Shape
+Shape=Rectangle (#SidebarWidth# + 20),(525),(#WidgetWidth#-#SidebarWidth#-40),0 | StrokeWidth 0.5 | Stroke Color 80808080
+
+[Widget10Icon]
+Meter=Image
+MeterStyle=Widget1Icon
+ImageName=#@#Images\Icons\AIUsage.png
+Y=(45+490)
+
+[Widget10Title]
+Meter=String
+MeterStyle=Widget1Title
+Text=#tAIUsage#
+Y=(45+495)
+
+[Widget10Opened]
+Measure=Plugin
+Plugin=ConfigActive
+ConfigName=#ROOTCONFIG#\Widgets\AIUsage
+UpdateDivider=1
+OnChangeAction=[!Refresh]
+
+[Widget10False]
+Meter=Shape
+MeterStyle=Widget1False
+Y=(538)
+Hidden=([&Widget10Opened:] <> -1)
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\AIUsage" "#AIUsageWidgetSize#.ini"]
+
+[Widget10True]
+Meter=Shape
+MeterStyle=Widget1True
+Y=(538)
+Hidden=([&Widget10Opened:] <> 1)
+LeftMouseUpAction=[!ToggleConfig "#ROOTCONFIG#\Widgets\AIUsage" "#AIUsageWidgetSize#.ini"]
 

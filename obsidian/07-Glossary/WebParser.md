@@ -8,7 +8,7 @@ tags: [glossary]
 > with a [[RegExp]].
 
 A parent `WebParser` downloads and matches; child `WebParser` measures with the same
-`URL=[Parent]` pick capture groups by `StringIndex`. Monterey uses it for the
+`URL=[Parent]` pick capture groups by `StringIndex`. Rich uses it for the
 [[Weather Data Flow]] and city geocoding. `FinishAction` fires when the fetch completes;
 `OnConnectErrorAction` / `OnRegExpErrorAction` handle failure.
 

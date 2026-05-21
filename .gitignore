@@ -9,3 +9,8 @@ obsidian/_Attachments/
 # Local secrets — real API keys, never committed.
 # Copy @Resources/Variables/Secrets.inc.example to Secrets.inc and add your key.
 @Resources/Variables/Secrets.inc
+
+# AI usage tracker — runtime data + endpoint caches written by AIUsage.ps1.
+@Resources/AIUsageData.txt
+@Resources/AIUsage-claude-cache.json
+@Resources/AIUsage-codex-cache.json

@@ -2,13 +2,13 @@
 tags: [moc, home]
 ---
 
-# Monterey for Rainmeter — Knowledge Vault
+# Rich for Rainmeter — Knowledge Vault
 
-A graph-linked tour of the **Monterey for Rainmeter** codebase. **Start with the
+A graph-linked tour of the **Rich for Rainmeter** codebase. **Start with the
 architecture flows** to build mental scaffolding, then drill into widgets, the framework,
 or patterns as needed.
 
-> **Monterey for Rainmeter** is a macOS-style widget pack for Windows, built entirely as
+> **Rich for Rainmeter** is a macOS-style widget pack for Windows, built entirely as
 > a [Rainmeter](https://www.rainmeter.net/) skin — a tree of declarative `.ini`/`.inc`
 > config files (mostly UTF-16 LE) plus three Lua scripts. There is no compiler and no
 > test suite; Rainmeter loads and renders the files directly. The hard part is invisible
@@ -29,7 +29,7 @@ or patterns as needed.
 
 ## 🧱 Widgets
 
-The nine end-user widgets. → [[01-Widgets/_index|All widgets]]
+The ten end-user widgets. → [[01-Widgets/_index|All widgets]]
 
 - [[01-Widgets/Clock/_index|Clock]] — analog/digital clock with timezones
 - [[01-Widgets/Calendar/_index|Calendar]] — month grid with Lua date logic
@@ -40,6 +40,7 @@ The nine end-user widgets. → [[01-Widgets/_index|All widgets]]
 - [[01-Widgets/Notes/_index|Notes]] — editable sticky note
 - [[01-Widgets/Reminders/_index|Reminders]] — Lua-backed to-do list
 - [[01-Widgets/Timer/_index|Timer]] — countdown with alarm
+- [[01-Widgets/AIUsage/_index|AI Usage]] — Claude/Codex 5h + 7d rate-limit usage
 
 ## ⚙️ Framework
 

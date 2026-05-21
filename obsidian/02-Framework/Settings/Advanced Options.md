@@ -12,7 +12,7 @@ tags: [framework, settings]
 
 ## How it works
 
-`AdvancedOptions.inc` exposes four tunable values: `WidgetBase` (size), `PaddingBase`, `RadiusBase`, and `WidgetOpacity` (background-card opacity — see [[Widget Scaffold]]). Each row pairs a localized label, a clickable value display, and a hidden [[InputText Plugin]] measure. Clicking the value runs `!CommandMeasure "InputN" "ExecuteBatch ALL"` to open the editor; on confirm, `Command1` does `!WriteKeyValue` into `Global.inc` then `!RefreshGroup Monterey`.
+`AdvancedOptions.inc` exposes four tunable values: `WidgetBase` (size), `PaddingBase`, `RadiusBase`, and `WidgetOpacity` (background-card opacity — see [[Widget Scaffold]]). Each row pairs a localized label, a clickable value display, and a hidden [[InputText Plugin]] measure. Clicking the value runs `!CommandMeasure "InputN" "ExecuteBatch ALL"` to open the editor; on confirm, `Command1` does `!WriteKeyValue` into `Global.inc` then `!RefreshGroup Rich`.
 
 The radius row (`Label3`/`Value3`/`Input3`) is hidden when `[&EffectAsNumber]=4`, because the Blur effect has no rounded corners to configure, and the panel height tracks that with `Floor([&EffectAsNumber] / 4)`. The opacity row (`Label4`/`Value4`/`Input4`) is always shown, so under Blur the panel holds size, padding, and opacity.
 

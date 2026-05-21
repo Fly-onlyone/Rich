@@ -4,7 +4,7 @@ tags: [moc, widgets]
 
 # Widgets — Map of Content
 
-> The nine end-user widgets. Each is a folder of four size `.ini` files plus shared
+> The ten end-user widgets. Each is a folder of four size `.ini` files plus shared
 > logic; all of them are composed through the [[Skin Composition Flow]].
 
 ## Timekeeping
@@ -18,6 +18,7 @@ tags: [moc, widgets]
 - [[01-Widgets/Music/_index|Music]] — media-player control with album-art coloring
 - [[01-Widgets/Monitor/_index|Monitor]] — CPU / RAM / Disk / Network / Battery gauges
 - [[01-Widgets/Volume/_index|Volume]] — system master volume and per-app mixing
+- [[01-Widgets/AIUsage/_index|AI Usage]] — Claude / Codex 5h + 7d rate-limit usage
 
 ## Information & input
 

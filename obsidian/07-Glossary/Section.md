@@ -8,7 +8,7 @@ tags: [glossary]
 > `[Rainmeter]` / `[Variables]` blocks are defined in.
 
 Sections are referenced by name elsewhere: `[SectionName]` inlines a measure's value,
-`[&SectionName]` reads it raw. Most of Monterey's logic is sections wired together by
+`[&SectionName]` reads it raw. Most of Rich's logic is sections wired together by
 name across many `@Include`d files.
 
 ## See also

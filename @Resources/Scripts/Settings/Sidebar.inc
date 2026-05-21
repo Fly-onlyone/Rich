@@ -4,15 +4,15 @@ SidebarWidth=180
 [BackgroundMeter]
 OnUpdateAction=[!ShowMeter "[#SettingsTab]Shape"]
 
-[Monterey]
+[Rich]
 Meter=Shape
 Shape=Rectangle 10,0,(#SidebarWidth#-20),30,6 | Fill Color #ForegroundColor#20 | StrokeWidth 0
 DynamicVariables=1
 Y=(25+30*1)
 
-[MontereyText]
+[RichText]
 Meter=String
-Text=Monterey Rainmeter
+Text=Rich Rainmeter
 X=(#SidebarWidth#/2)
 Padding=6,6,6,6
 DynamicVariables=1

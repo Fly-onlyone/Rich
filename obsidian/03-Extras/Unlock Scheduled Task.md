@@ -24,7 +24,7 @@ The task's action runs `Start.bat`, which writes `1` into `State.txt` in the Unl
 - [[Unlock Skin]] — reads the `State.txt` flag the task sets
 
 ## Gotchas
-- `task.xml` hard-codes a working directory of `%USERPROFILE%\Documents\Rainmeter\Skins\Monterey\@Resources\Scripts\Extras\Unlock`; a non-default Rainmeter install path breaks it.
+- `task.xml` hard-codes a working directory of `%USERPROFILE%\Documents\Rainmeter\Skins\Rich\@Resources\Scripts\Extras\Unlock`; a non-default Rainmeter install path breaks it.
 - `Install.cmd` must be run from inside the Unlock folder (it `cd %1`s and references `task.xml` by relative name).
 
 ## See also

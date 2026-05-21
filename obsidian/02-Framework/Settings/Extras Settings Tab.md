@@ -4,7 +4,7 @@ tags: [framework, settings]
 
 # Extras Settings Tab
 
-> The settings tab that manages Monterey's companion skins — ThemeUpdater, Sidebar, and Unlock.
+> The settings tab that manages Rich's companion skins — ThemeUpdater, Sidebar, and Unlock.
 
 ## Source
 

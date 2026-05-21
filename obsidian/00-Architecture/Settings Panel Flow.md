@@ -28,7 +28,7 @@ flowchart TD
 Clicking a sidebar button writes `SettingsTab` and refreshes; the refreshed skin
 `@Include`s the matching `Settings/<Tab>.inc` plus its language file. Tabs that change
 widget appearance write through the [[Settings Persistence Flow]] and refresh the
-`Monterey` skin group so widgets pick up the change.
+`Rich` skin group so widgets pick up the change.
 
 ## Background panel layering
 

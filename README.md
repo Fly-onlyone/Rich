@@ -9,14 +9,12 @@
 ## Get started
 
 1. Install [Rainmeter](https://www.rainmeter.net/)
-2. Get our [latest release](https://github.com/creewick/MontereyRainmeter/releases)
-3. Run `Monterey.rmskin`
+2. Get our [latest release](https://github.com/Fly-onlyone/Rich/releases)
+3. Run `Rich.rmskin`
 
 ## Wiki
 
-### [User guide](https://github.com/creewick/MontereyRainmeter/wiki/User-guide)
-### [Performance Index](https://github.com/creewick/MontereyRainmeter/wiki/Performance-Index)
-### [Documentation](https://github.com/creewick/MontereyRainmeter/wiki/Documentation)
+Rich shares the architecture of **Monterey for Rainmeter**, so its guides still apply — see the [User guide](https://github.com/creewick/MontereyRainmeter/wiki/User-guide), [Performance Index](https://github.com/creewick/MontereyRainmeter/wiki/Performance-Index), and [Documentation](https://github.com/creewick/MontereyRainmeter/wiki/Documentation).
 > 🛠 **Contributors:** in-repo developer docs live in [`obsidian/`](./obsidian/_HOME.md) — a graph-linked Obsidian vault. Open the folder as a vault, or browse the markdown directly.
 
 
@@ -26,7 +24,7 @@
 
 <img src="@Resources/Images/Banners/widgets.png" width="100%" />
 
-We have 9 widgets available
+We have 10 widgets available
 
 |Icon|Widget|Description|
 |-|-|-|
@@ -39,6 +37,7 @@ We have 9 widgets available
 |<img src="@Resources/Images/Icons/Notes.png" />|**Notes**|Gives you a quick access to your most important text information|
 |<img src="@Resources/Images/Icons/Reminders.png" />|**Reminders**|A basic to-do list with counter|
 |<img src="@Resources/Images/Icons/Timer.png" />|**Timer**|A basic countdown with an alarm sound|
+|<img src="@Resources/Images/Icons/AIUsage.png" />|**AI Usage**|Shows how much of your Claude or Codex 5-hour and 7-day rate-limit budget remains|
 
 <img src="@Resources/Images/Banners/sizes.png" width="500px" align="right" />
 
@@ -77,6 +76,7 @@ So far we support 4 languages
 
 | User | Credit |
 |-|-|
+| [creewick](https://github.com/creewick) | [Monterey for Rainmeter](https://github.com/creewick/MontereyRainmeter) — the original widget pack Rich is based on |
 | [fediaFedia](https://github.com/fediaFedia) | [Big Sur for Rainmeter](https://www.deviantart.com/fediafedia/art/Big-Sur-RC1-for-Rainmeter-846882462) |
 | [socks-the-fox](https://github.com/socks-the-fox) | [Chameleon plugin](https://github.com/socks-the-fox/Chameleon) |
 | [i2002](https://github.com/i2002) | [MediaPlayer plugin](https://github.com/i2002/RainmeterMediaPlayer) |

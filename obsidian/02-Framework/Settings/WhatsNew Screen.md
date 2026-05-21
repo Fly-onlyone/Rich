@@ -13,7 +13,7 @@ tags: [framework, settings]
 
 ## How it works
 
-`Scripts/Settings/WhatsNew.inc` builds a welcome panel inside the settings window: a bold `[Title]` ("Welcome to Monterey Rainmeter 1.0.1"), a `[SubTitle]`, and a rounded `[WhatsNew]` shape containing icon/title/text entries describing each change. Several later entries (Low Power Mode, Extras section) are commented out — only the Weather widget fix is live. A `[UserGuide]` link points new users to the GitHub wiki.
+`Scripts/Settings/WhatsNew.inc` builds a welcome panel inside the settings window: a bold `[Title]` ("Welcome to Rich Rainmeter 1.0.1"), a `[SubTitle]`, and a rounded `[WhatsNew]` shape containing icon/title/text entries describing each change. Several later entries (Low Power Mode, Extras section) are commented out — only the Weather widget fix is live. A `[UserGuide]` link points new users to the GitHub wiki.
 
 The separate `Scripts/Includes/WhatsNew.inc` is the reusable [[WhatsNew Scaffold]] used by individual widgets: it reads `#Icon1#`/`#Title1#`/`#Text1#` variables and provides a `[Close]` button that writes the widget size back to Medium and reactivates the config.
 

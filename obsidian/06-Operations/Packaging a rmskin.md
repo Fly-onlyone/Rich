@@ -18,8 +18,8 @@ A `.rmskin` is a self-installing archive. To build one:
 
 1. Open Rainmeter's **Skin Packager** (in the installer toolset / *Manage* tools).
 2. Add the skin folders (`Widgets/`, `Extras/`) and `@Resources/`.
-3. Set the package name (`Monterey`), author, and version.
-4. Export — the result is `Monterey.rmskin`, which the README points users to.
+3. Set the package name (`Rich`), author, and version.
+4. Export — the result is `Rich.rmskin`, which the README points users to.
 
 The `.rmskin` is **not** checked into the repo; releases are published on GitHub.
 

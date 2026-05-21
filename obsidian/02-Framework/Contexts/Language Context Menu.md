@@ -14,7 +14,7 @@ tags: [framework, contexts]
 
 `Contexts/Languages.inc` defines `LanguagesContextTitle*` / `LanguagesContextAction*` pairs for the four supported languages: `ru`, `ua`, `en`, `de`. The titles use localized strings (`#ru#`, `#ua#`, etc.) so each is shown in its own language.
 
-Each action `!WriteKeyValue`s `Language` into `Variables\Global.inc`, then runs `!RefreshGroup Monterey` so every skin in the group reloads with the new locale — the [[Settings Persistence Pattern]] feeding the [[Localization Flow]].
+Each action `!WriteKeyValue`s `Language` into `Variables\Global.inc`, then runs `!RefreshGroup Rich` so every skin in the group reloads with the new locale — the [[Settings Persistence Pattern]] feeding the [[Localization Flow]].
 
 A `[SetLanguageTickMark]` String [[Measure]] reads `#Language#` and `IfMatch` appends a checkmark `[\x2714]` to the active language — the [[Tickmark Indicator]].
 

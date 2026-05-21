@@ -27,7 +27,7 @@ Shape2=Rectangle 2,2,20,20,10 | Fill Color ffffff | StrokeWidth 0
 Y=(82)
 X=(#WidgetWidth# - 30 - 40)
 Hidden=(#BatterySaverMode# = 1)
-LeftMouseUpAction=[!WriteKeyValue Variables BatterySaverMode 1 "#@#Variables\Global.inc"][!RefreshGroup Monterey]
+LeftMouseUpAction=[!WriteKeyValue Variables BatterySaverMode 1 "#@#Variables\Global.inc"][!RefreshGroup Rich]
 
 [BatterySaverModeTrue]
 Meter=Shape
@@ -36,7 +36,7 @@ Shape2=Rectangle 16,2,20,20,10 | Fill Color ffffff | StrokeWidth 0
 Y=(82)
 X=(#WidgetWidth# - 30 - 40)
 Hidden=(#BatterySaverMode# = 0)
-LeftMouseUpAction=[!WriteKeyValue Variables BatterySaverMode 0 "#@#Variables\Global.inc"][!RefreshGroup Monterey]
+LeftMouseUpAction=[!WriteKeyValue Variables BatterySaverMode 0 "#@#Variables\Global.inc"][!RefreshGroup Rich]
 
 [Line1]
 Meter=Shape

@@ -12,9 +12,9 @@ tags: [framework, settings]
 
 ## How it works
 
-`Battery.inc` draws a `BatterySaverMode` toggle as two [[Shape Meter]] pills — `BatterySaverModeFalse` (grey) and `BatterySaverModeTrue` (green). Each is hidden based on the `#BatterySaverMode#` [[Variable]]; clicking flips it via `!WriteKeyValue Variables BatterySaverMode <0|1>` into `Global.inc` followed by `!RefreshGroup Monterey`. Battery Saver Mode reduces widget animation and refresh rate.
+`Battery.inc` draws a `BatterySaverMode` toggle as two [[Shape Meter]] pills — `BatterySaverModeFalse` (grey) and `BatterySaverModeTrue` (green). Each is hidden based on the `#BatterySaverMode#` [[Variable]]; clicking flips it via `!WriteKeyValue Variables BatterySaverMode <0|1>` into `Global.inc` followed by `!RefreshGroup Rich`. Battery Saver Mode reduces widget animation and refresh rate.
 
-A second row, `BatteryAuto`, toggles the [[AutoLowPowerMode Skin]]. Its state is read with the [[ConfigActive Plugin]] (`[&BatteryAutoOpened:]`), and clicking runs `!ToggleConfig` on `Monterey\Extras\AutoLowPowerMode`. Localized help text sits below both rows.
+A second row, `BatteryAuto`, toggles the [[AutoLowPowerMode Skin]]. Its state is read with the [[ConfigActive Plugin]] (`[&BatteryAutoOpened:]`), and clicking runs `!ToggleConfig` on `Rich\Extras\AutoLowPowerMode`. Localized help text sits below both rows.
 
 ## Depends on
 

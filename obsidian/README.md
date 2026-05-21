@@ -1,7 +1,7 @@
-# Monterey for Rainmeter — Documentation Vault
+# Rich for Rainmeter — Documentation Vault
 
 This folder is an [Obsidian](https://obsidian.md) vault: a graph-linked, atomic-note
-knowledge base for the **Monterey for Rainmeter** skin pack.
+knowledge base for the **Rich for Rainmeter** skin pack.
 
 ## Open it
 

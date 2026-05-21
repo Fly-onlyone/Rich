@@ -12,7 +12,7 @@ tags: [framework, settings]
 
 ## How it works
 
-`ThemeOptions.inc` defines a `DarkThemeFrom`/`DarkThemeTo` time pair for the Auto effect and `ColorThemeBackground`/`ColorThemeForeground` template fields for the Wallpaper effect. Each input is an [[InputText Plugin]] measure whose `Command1` writes into `Global.inc` followed by `!RefreshGroup Monterey` so every loaded widget re-reads the changed theme state.
+`ThemeOptions.inc` defines a `DarkThemeFrom`/`DarkThemeTo` time pair for the Auto effect and `ColorThemeBackground`/`ColorThemeForeground` template fields for the Wallpaper effect. Each input is an [[InputText Plugin]] measure whose `Command1` writes into `Global.inc` followed by `!RefreshGroup Rich` so every loaded widget re-reads the changed theme state.
 
 Visibility is driven by [[Theme As Number]]'s `EffectAsNumber`: the whole panel is hidden for Solid and Blur, Auto fields show at `2`, and Wallpaper fields show at `3`.
 

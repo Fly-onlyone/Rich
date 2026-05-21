@@ -14,7 +14,7 @@ tags: [framework, contexts]
 
 `Contexts/Units.inc` defines `UnitsContextTitle*` / `UnitsContextAction*` pairs for the three temperature units: Celsius, Fahrenheit, Kelvin. Titles are localized strings (`[#tCelsius]`, etc.).
 
-Each action `!WriteKeyValue`s `Units` into `Variables\Global.inc`, then runs `!RefreshGroup Monterey` so all widgets re-read the unit — the [[Settings Persistence Pattern]].
+Each action `!WriteKeyValue`s `Units` into `Variables\Global.inc`, then runs `!RefreshGroup Rich` so all widgets re-read the unit — the [[Settings Persistence Pattern]].
 
 A `[SetUnitsTickMark]` String [[Measure]] reads `#Units#` and uses `IfMatch` to append a checkmark `[\x2714]` to the currently-selected unit — the [[Tickmark Indicator]].
 

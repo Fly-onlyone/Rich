@@ -4,7 +4,7 @@ tags: [architecture, updates]
 
 # Update & Refresh Model
 
-> Rainmeter ticks each skin on a timer. Monterey keeps that tick cheap by disabling
+> Rainmeter ticks each skin on a timer. Rich keeps that tick cheap by disabling
 > per-section updates globally and refreshing measures/meters explicitly in groups.
 
 ## Source

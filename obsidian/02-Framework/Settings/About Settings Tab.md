@@ -4,7 +4,7 @@ tags: [framework, settings]
 
 # About Settings Tab
 
-> The settings tab showing the Monterey logo, version, license, credits, and outbound links.
+> The settings tab showing the Rich logo, version, license, credits, and outbound links.
 
 ## Source
 
@@ -12,13 +12,13 @@ tags: [framework, settings]
 
 ## How it works
 
-`About.inc` is presentational only — it has no toggles or [[InputText Plugin]] fields. It places the Monterey logo image, then a stack of string [[Meter|meter]] rows: the "Monterey Rainmeter" title, the version (`#tVersion#` label plus a literal `1.0.1`), the license (`CC BY-NC-SA 4.0`), and an "inspired by" credit to Big Sur for Rainmeter.
+`About.inc` is presentational only — it has no toggles or [[InputText Plugin]] fields. It places the Rich logo image, then a centred stack of string [[Meter|meter]] rows: the **Rich** title, the version (`#tVersion#` label plus a literal `2.0`), the license (`CC BY-NC-SA 4.0`), and an "inspired by" credit to Big Sur for Rainmeter.
 
-Several rows carry a `LeftMouseUpAction` that opens an external URL — the author's GitHub, the Creative Commons license page, the inspiration's DeviantArt page. Three bottom buttons styled by `[GitHub]` link to the project's GitHub repo, Telegram, and the Rainmeter forum thread.
+A few rows carry a `LeftMouseUpAction` that opens an external URL — the Creative Commons license page and the inspiration's DeviantArt page. A single centred `[GitHub]` button links to the project's repo (`github.com/Fly-onlyone/Rich`). Note `[Title]` doubles as the `MeterStyle=Title` base for the version/license/inspired rows, so its `StringAlign=Center` is overridden per row — `Right` for labels, `Left` for values.
 
 ## Depends on
 
-- [[Global Variables]] — `SidebarWidth`, `FontFace`, `ForegroundColor` for layout
+- [[Global Variables]] — `SidebarWidth`, `WidgetWidth`, `FontFace`, `ForegroundColor` for layout
 - [[Localization Token Pattern]] — `#tVersion#`, `#tLicense#`, `#tInspired#` labels
 
 ## Used by

@@ -13,7 +13,7 @@ Any skin or widget that exposes a custom right-click menu.
 ```ini
 ; in Scripts/Contexts/Widget.inc
 ContextTitle=Show Settings
-ContextAction=[!ActivateConfig "Monterey\Settings"]
+ContextAction=[!ActivateConfig "Rich\Settings"]
 ContextTitle2=Refresh
 ContextAction2=[!Refresh]
 
