@@ -25,7 +25,7 @@ The widget shows **one provider at a time** — the `Provider` variable (`Codex`
 
 The data pipeline avoids any `!Refresh` loop:
 
-1. `[MeasureRun]` (the **RunCommand** plugin) runs `AIUsage.ps1` — once on load via `[MeasureInit]`, then every `#AIUsageRefreshSeconds#` (default `300`) via `[MeasureTimer]`.
+1. `[MeasureRun]` (the **RunCommand** plugin) runs `AIUsage.ps1` — on load and then every `#AIUsageRefreshSeconds#` (default `900`), both driven by `[MeasureTimer]`: a `Calc` measure carrying `IfConditionMode=1`, so its `IfTrueAction` re-fires on every tick — the load-time update *and* each interval — instead of only on the first false→true edge (which would fire once and freeze the widget).
 2. `AIUsage.ps1` reads the local session files for **both** providers and writes a single delimited line to `@Resources/AIUsageData.txt`.
 3. `[MeasureRun]`'s `FinishAction` tells `[MeasureData]` (a WebParser `file://` measure) to re-read that file.
 4. Ten `Group=AIData` children expose raw values; `Group=AICalc` `Calc` measures derive *remaining* (`100 − used`); bars are coloured by [[Monitor Color Thresholds|the green/yellow/red threshold idea]] shared with the Monitor widget (keyed off *used* %, so a near-empty bar is red).
