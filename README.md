@@ -37,7 +37,7 @@ We have 10 widgets available
 |<img src="@Resources/Images/Icons/Notes.png" />|**Notes**|Gives you a quick access to your most important text information|
 |<img src="@Resources/Images/Icons/Reminders.png" />|**Reminders**|A basic to-do list with counter|
 |<img src="@Resources/Images/Icons/Timer.png" />|**Timer**|A basic countdown with an alarm sound|
-|<img src="@Resources/Images/Icons/AIUsage.png" />|**AI Usage**|Shows how much of your Claude or Codex 5-hour and 7-day rate-limit budget remains|
+|<img src="@Resources/Images/Icons/AIUsage.png" />|**AI Usage**|Shows how much of your Claude 5-hour and 7-day rate-limit budget remains|
 
 <img src="@Resources/Images/Banners/sizes.png" width="500px" align="right" />
 

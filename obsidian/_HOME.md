@@ -40,7 +40,7 @@ The ten end-user widgets. → [[01-Widgets/_index|All widgets]]
 - [[01-Widgets/Notes/_index|Notes]] — editable sticky note
 - [[01-Widgets/Reminders/_index|Reminders]] — Lua-backed to-do list
 - [[01-Widgets/Timer/_index|Timer]] — countdown with alarm
-- [[01-Widgets/AIUsage/_index|AI Usage]] — Claude/Codex 5h + 7d rate-limit usage
+- [[01-Widgets/AIUsage/_index|AI Usage]] — Claude 5h + 7d rate-limit usage
 
 ## ⚙️ Framework
 
