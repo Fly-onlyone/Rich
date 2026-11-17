@@ -20,3 +20,6 @@ obsidian/_Attachments/
 # Package build output (script/build-package.ps1) and CI scratch (UTF-8 Lua copies).
 dist/
 .ci/
+
+# Clean-VM test evidence (script/vm/test-rich.ps1).
+report/

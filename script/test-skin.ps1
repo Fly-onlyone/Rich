@@ -321,7 +321,9 @@ if (Test-Path -LiteralPath $vaultRoot) {
 
 # In -Staged mode only the staged scripts are linted, so the hook stays fast.
 $luaFiles = @(Get-TrackedFile '*.lua')
-$ps1Files = @(Get-TrackedFile '*.ps1')
+# script/vm holds the clean-VM rig vendored from the clean-vm-test skill; its helpers keep
+# upstream's style and are not linted here. The repo's own test-*.ps1 there still are.
+$ps1Files = @(Get-TrackedFile '*.ps1' | Where-Object { $_ -notlike 'script/vm/*' -or (Split-Path $_ -Leaf) -like 'test-*.ps1' })
 if ($Staged) {
     $luaFiles = @($luaFiles | Where-Object { $stagedSet.Contains($_) })
     $ps1Files = @($ps1Files | Where-Object { $stagedSet.Contains($_) })
