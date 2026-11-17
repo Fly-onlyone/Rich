@@ -1,18 +1,24 @@
-# AIUsage.ps1 — Rich for Rainmeter
+# AIUsage.ps1 - Rich for Rainmeter
 # -----------------------------------------------------------------------------
 # Reads Claude rate-limit usage and writes a flat data file that the AIUsage
 # widget reads via a WebParser file:// measure.
 #
-# Claude — live account-wide usage from api.anthropic.com/api/oauth/usage,
+# Claude - live account-wide usage from api.anthropic.com/api/oauth/usage,
 #          authenticated with the OAuth token in ~/.claude/.credentials.json.
 #
 # The endpoint is undocumented and can rate-limit; each good reading is cached
 # (AIUsage-claude-cache.json) so the widget keeps showing real numbers while
 # the endpoint is throttled.
 #
-# Output: @Resources/AIUsageData.txt — a single delimited line, e.g.
+# Output: @Resources/AIUsageData.txt - a single delimited line, e.g.
 #   claude5=71|claude7=11|claude5r=2h 14m|claude7r=5d 3h|claudeerr=0|
 # -----------------------------------------------------------------------------
+
+# The empty catch blocks are deliberate: request and cache I/O are best-effort.
+# A failure leaves $claudeErr set, and the widget falls back to the cached reading.
+[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSAvoidUsingEmptyCatchBlock', '',
+    Justification = 'Best-effort request and cache I/O; failures fall back to the cached reading.')]
+param()
 
 $ErrorActionPreference = 'SilentlyContinue'
 $outFile = Join-Path $PSScriptRoot '..\..\AIUsageData.txt'   # -> @Resources\AIUsageData.txt
@@ -38,7 +44,7 @@ function Format-Reset([object]$value) {
 }
 
 # --- Claude: live usage from Anthropic's /api/oauth/usage endpoint -----------
-# Account-wide — reflects Claude Code, Claude Desktop and claude.ai web, and
+# Account-wide - reflects Claude Code, Claude Desktop and claude.ai web, and
 # works with Claude Code closed. The OAuth token comes from
 # ~/.claude/.credentials.json. The endpoint is undocumented and rate-limits
 # (429) aggressively; a good reading is cached to AIUsage-claude-cache.json so
@@ -77,7 +83,7 @@ if ($claudeErr -eq 0) {
         [System.IO.File]::WriteAllText($claudeCache, ($cache | ConvertTo-Json -Compress), [System.Text.UTF8Encoding]::new($false))
     } catch { }
 } elseif (Test-Path $claudeCache) {
-    # Endpoint failed (e.g. 429) — fall back to the last good reading. Reset
+    # Endpoint failed (e.g. 429) - fall back to the last good reading. Reset
     # times are re-derived from the stored timestamps, so they stay accurate.
     try {
         $c = Get-Content -Raw -LiteralPath $claudeCache | ConvertFrom-Json
