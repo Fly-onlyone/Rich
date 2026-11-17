@@ -71,7 +71,9 @@ $ForbiddenTracked = @(
     '@Resources/AIUsage-codex-cache.json'
 )
 
-$Languages = @('ru', 'ua', 'de')
+# Every translation folder is checked against en, so a new language is covered automatically.
+$Languages = @(Get-ChildItem -LiteralPath (Join-Path $RepoRoot '@Resources/Languages') -Directory |
+    Where-Object Name -NE 'en' | ForEach-Object Name)
 $Findings = [System.Collections.Generic.List[string]]::new()
 $Warnings = [System.Collections.Generic.List[string]]::new()
 
