@@ -8,8 +8,9 @@
     then packs it into <OutDir>/<ArchiveName>:
 
       RMSKIN.ini                       generated, see below
-      Skins/Rich/...                   tracked skin files only (git ls-files),
-                                       so local secrets and runtime caches never ship
+      Skins/Rich/...                   the skin files as committed in HEAD, so a local
+                                       build matches CI and releases, and local
+                                       secrets, caches and setting edits never ship
       Plugins/{32bit,64bit}/<Name>.dll from packaging/Plugins/<Name>/<arch>/; each
                                        DLL's PE header must match its arch folder
 
@@ -39,8 +40,15 @@
 .PARAMETER ArchiveName
     File name of the .rmskin. Default: Rich_<Version>.rmskin.
 
+.PARAMETER WorkingTree
+    Pack the working-tree copies of the tracked skin files instead of HEAD, to try
+    uncommitted changes. Every uncommitted file packed is listed in a warning:
+    Variables/*.inc edits become the package's defaults.
+
 .EXAMPLE
     pwsh script/build-package.ps1 -Version 1.1.0
+.EXAMPLE
+    pwsh script/build-package.ps1 -Version 0.0.0-try -WorkingTree
 #>
 [CmdletBinding()]
 param(
@@ -51,7 +59,9 @@ param(
     [string]$OutDir = 'dist',
 
     [ValidatePattern('^[\w.+-]+\.rmskin$')]
-    [string]$ArchiveName
+    [string]$ArchiveName,
+
+    [switch]$WorkingTree
 )
 
 Set-StrictMode -Version Latest
@@ -72,14 +82,29 @@ $pkg = Join-Path $outRoot 'pkg'
 if (Test-Path -LiteralPath $pkg) { Remove-Item -LiteralPath $pkg -Recurse -Force }
 $skinRoot = Join-Path $pkg "Skins/$PackageName"
 
-# 1. Skin files: tracked only.
-$files = @(git -c core.quotepath=off ls-files -- @SkinContent | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf })
-if ($files.Count -eq 0) { throw 'No tracked skin files found.' }
-foreach ($file in $files) {
-    $dest = Join-Path $skinRoot $file
-    New-Item -ItemType Directory -Force -Path (Split-Path $dest) | Out-Null
-    Copy-Item -LiteralPath $file -Destination $dest
+# 1. Skin files: as committed in HEAD, or the working-tree copies with -WorkingTree.
+$uncommitted = @(git -c core.quotepath=off diff --name-only HEAD -- @SkinContent)
+New-Item -ItemType Directory -Force -Path $skinRoot | Out-Null
+if ($WorkingTree) {
+    $tracked = @(git -c core.quotepath=off ls-files -- @SkinContent | Where-Object { Test-Path -LiteralPath $_ -PathType Leaf })
+    foreach ($file in $tracked) {
+        $dest = Join-Path $skinRoot $file
+        New-Item -ItemType Directory -Force -Path (Split-Path $dest) | Out-Null
+        Copy-Item -LiteralPath $file -Destination $dest
+    }
+    if ($uncommitted) { Write-Warning "Packing uncommitted changes in $($uncommitted.Count) file(s): $($uncommitted -join ', ')" }
 }
+else {
+    $tarball = Join-Path $outRoot 'skin-head.tar'
+    git archive --format=tar --output=$tarball HEAD -- @SkinContent
+    if ($LASTEXITCODE -ne 0) { throw 'git archive failed.' }
+    tar -xf $tarball -C $skinRoot
+    if ($LASTEXITCODE -ne 0) { throw 'Extracting the skin files failed.' }
+    Remove-Item -LiteralPath $tarball
+    if ($uncommitted) { Write-Warning "Built from HEAD; uncommitted changes in $($uncommitted.Count) file(s) are not included (add -WorkingTree to include them): $($uncommitted -join ', ')" }
+}
+$files = @(Get-ChildItem -LiteralPath $skinRoot -Recurse -File)
+if ($files.Count -eq 0) { throw 'No skin files found.' }
 
 # 2. Stamp the version into the staged copies, keeping each file's encoding:
 #    [Metadata] Version= in every .ini, and [Variables] RichVersion= (the version the
