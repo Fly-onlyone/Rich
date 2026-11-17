@@ -18,9 +18,11 @@ tags: [operations, release]
 
 `pwsh script/build-package.ps1 -Version 1.2.0` writes `dist/Rich_1.2.0.rmskin`:
 
-1. Copies the **tracked** files of `@Resources/`, `Widgets/`, `Extras/`, `Settings.ini`
-   and `LICENSE` into `Skins/Rich/`. Gitignored local files (`Secrets.inc`, the AI
-   Usage caches) never ship.
+1. Extracts `@Resources/`, `Widgets/`, `Extras/`, `Settings.ini` and `LICENSE` **as
+   committed in HEAD** into `Skins/Rich/`, so a local build matches CI and releases.
+   Gitignored files (`Secrets.inc`, the AI Usage caches) and uncommitted edits never
+   ship; an uncommitted `Variables/*.inc` would otherwise become every user's default.
+   `-WorkingTree` packs the working copies instead, warning which uncommitted files it took.
 2. Stamps the version into every `[Metadata] Version=` of the staged copies and into
    `RichVersion=` in `Scripts/Settings/About.inc` (shown on the About page; `dev` in the
    repo), in each file's own encoding. None of these are edited by hand. `RichVersion`
