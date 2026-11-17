@@ -50,7 +50,9 @@ since the previous stable tag, and publishes the release. A tag with a suffix
 - Don't build with `rmskin-builder` / `rmskin-action`: it rewrites `RMSKIN.ini` with
   escaped backslashes (`Load=Rich\\Settings.ini`), which Rainmeter reads literally.
 - Don't test-install a package on a dev machine whose `Skins\Rich` is a junction to the
-  repo: the installer moves it to `@Backup`. Use Windows Sandbox or a VM.
+  repo: the installer moves it to `@Backup`. `script/vm/test-rich.ps1` installs it into a
+  clean Hyper-V guest instead (Rainmeter, the package, the widgets, a reinstall that must
+  keep a changed setting) and writes screenshots and logs to `report/`.
 
 ## See also
 
