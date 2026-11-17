@@ -8,8 +8,16 @@ std = "lua51"
 -- Objects Rainmeter injects into every script.
 read_globals = { "SKIN", "SELF" }
 
--- Top-level functions are Rainmeter entry points (Initialize, Update) or are
--- called from skins via [!CommandMeasure Script "fn()"], so they must be global.
-allow_defined_top = true
+-- Scripts keep their state in globals set in Initialize() and read by later
+-- calls. Reading a global that is never assigned anywhere is still reported.
+allow_defined = true
+
+ignore = {
+  "131", -- unused global: Rainmeter calls Initialize/Update, skins call the rest via !CommandMeasure
+  "61.", -- whitespace only
+}
 
 max_line_length = false
+
+-- Calendar.lua assigns these through loadstring('Size=...')(), which luacheck cannot see.
+files["**/Widgets/Calendar.lua"] = { globals = { "Size", "OffsetX" } }
