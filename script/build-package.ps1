@@ -81,12 +81,17 @@ foreach ($file in $files) {
     Copy-Item -LiteralPath $file -Destination $dest
 }
 
-# 2. Stamp [Metadata] Version= in the staged .ini copies, keeping each file's encoding.
+# 2. Stamp the version into the staged copies, keeping each file's encoding:
+#    [Metadata] Version= in every .ini, and [Variables] RichVersion= (the version the
+#    About page shows). RichVersion lives in Scripts/Settings/About.inc, never in a
+#    Variables/*.inc file: those are VariableFiles, so an upgrade would carry the old
+#    version over the new one.
 $utf16 = [Text.UnicodeEncoding]::new($false, $true)
 $utf8 = [Text.UTF8Encoding]::new($false)
 $stamped = 0
-foreach ($ini in (Get-ChildItem -LiteralPath $skinRoot -Recurse -File -Filter '*.ini')) {
-    $bytes = [IO.File]::ReadAllBytes($ini.FullName)
+$richVersionStamped = 0
+foreach ($file in (Get-ChildItem -LiteralPath $skinRoot -Recurse -File -Include '*.ini', '*.inc')) {
+    $bytes = [IO.File]::ReadAllBytes($file.FullName)
     $isUtf16 = $bytes.Length -ge 2 -and $bytes[0] -eq 0xFF -and $bytes[1] -eq 0xFE
     $text = if ($isUtf16) { [Text.Encoding]::Unicode.GetString($bytes, 2, $bytes.Length - 2) } else { $utf8.GetString($bytes) }
 
@@ -95,16 +100,24 @@ foreach ($ini in (Get-ChildItem -LiteralPath $skinRoot -Recurse -File -Filter '*
     $lines = [regex]::Split($text, '(?<=\n)')   # keeps each line's own ending
     for ($i = 0; $i -lt $lines.Length; $i++) {
         if ($lines[$i] -match '^\s*\[([^\]]+)\]') { $section = $Matches[1].Trim(); continue }
-        if ($section -ieq 'Metadata' -and $lines[$i] -match '^(\s*Version\s*=)[^\r\n]*(\r?\n?)$') {
+        if ($file.Extension -ieq '.ini' -and $section -ieq 'Metadata' -and $lines[$i] -match '^(\s*Version\s*=)[^\r\n]*(\r?\n?)$') {
             $lines[$i] = "$($Matches[1])$Version$($Matches[2])"
             $changed = $true
+        }
+        elseif ($section -ieq 'Variables' -and $lines[$i] -match '^(\s*RichVersion\s*=)[^\r\n]*(\r?\n?)$') {
+            $lines[$i] = "$($Matches[1])$Version$($Matches[2])"
+            $changed = $true
+            $richVersionStamped++
         }
     }
     if ($changed) {
         $encoding = if ($isUtf16) { $utf16 } else { $utf8 }
-        [IO.File]::WriteAllText($ini.FullName, (-join $lines), $encoding)
-        $stamped++
+        [IO.File]::WriteAllText($file.FullName, (-join $lines), $encoding)
+        if ($file.Extension -ieq '.ini') { $stamped++ }
     }
+}
+if ($richVersionStamped -ne 1) {
+    throw "Expected exactly one [Variables] RichVersion= to stamp (Scripts/Settings/About.inc), found $richVersionStamped."
 }
 
 # 3. Plugins: packaging/Plugins/<Name>/<arch>/<Name>.dll -> Plugins/<arch>/<Name>.dll.
