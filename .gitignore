@@ -10,10 +10,9 @@ obsidian/_Attachments/
 # Copy @Resources/Variables/Secrets.inc.example to Secrets.inc and add your key.
 @Resources/Variables/Secrets.inc
 
-# AI usage tracker — runtime data + endpoint caches written by AIUsage.ps1.
+# AI usage tracker — runtime data + endpoint cache written by AIUsage.ps1.
 @Resources/AIUsageData.txt
 @Resources/AIUsage-claude-cache.json
-@Resources/AIUsage-codex-cache.json
 
 # Claude Code worktrees (EnterWorktree) — isolated checkouts, never committed.
 .claude/worktrees/

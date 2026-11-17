@@ -4,7 +4,7 @@ tags: [moc, widgets, aiusage]
 
 # AIUsage — Map of Content
 
-> Claude and Codex rate-limit usage — the 5-hour and 7-day windows as split bars.
+> Claude rate-limit usage — the 5-hour and 7-day windows as split bars.
 
 ## Concepts
 
