@@ -1,0 +1,83 @@
+name: CI
+
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+  # Reused by release.yml as its gate.
+  workflow_call:
+  # Weekly: full-history secret scan, and early warning if an action breaks.
+  schedule:
+    - cron: "17 4 * * 1"
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  lint:
+    name: Skin checks
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      # Encoding, duplicate keys, @Include targets, i18n parity, plugin coverage,
+      # tracked secrets, vault wikilinks, PSScriptAnalyzer (preinstalled on the runner).
+      # Also writes UTF-8 copies of the UTF-16 Lua scripts for luacheck.
+      - name: Static checks
+        shell: pwsh
+        run: ./script/test-skin.ps1 -LuaUtf8Dir .ci/lua
+
+      - name: Lua lint
+        if: ${{ !cancelled() }}
+        uses: lunarmodules/luacheck@v1.2.0
+        with:
+          args: .ci/lua
+
+  secrets:
+    name: Secret scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - uses: gitleaks/gitleaks-action@v3
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  package:
+    name: Build .rmskin
+    needs: lint
+    # release.yml builds its own versioned package; skip the dev build there.
+    if: ${{ !startsWith(github.ref, 'refs/tags/') }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+
+      - name: Stage package
+        shell: pwsh
+        run: ./script/build-package.ps1 -Version "dev-$($env:GITHUB_SHA.Substring(0, 7))"
+
+      - name: Build .rmskin
+        id: rmskin
+        uses: 2bndy5/rmskin-action@v2.0.4
+        with:
+          path: dist/pkg
+          dir-out: dist
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: ${{ steps.rmskin.outputs.arc-name }}
+          path: dist/*.rmskin
+          if-no-files-found: error
+          retention-days: 14

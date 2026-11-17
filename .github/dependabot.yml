@@ -1,0 +1,13 @@
+version: 2
+updates:
+  # Keep workflow actions current (Node runtime removals break old majors).
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
+      include: scope
+    groups:
+      actions:
+        patterns: ["*"]

@@ -1,0 +1,24 @@
+#!/bin/sh
+# Rich commit-msg hook: enforce Conventional Commits.
+# The GitHub release notes (cliff.toml) are built from these subjects.
+# Enable once per clone:   git config core.hooksPath .githooks
+
+# First line that is neither a comment nor blank.
+subject=$(sed -e '/^[[:space:]]*#/d' -e '/^[[:space:]]*$/d' "$1" | head -n 1)
+
+case "$subject" in
+    "Merge "* | "Revert "* | "fixup! "* | "squash! "* | "amend! "*) exit 0 ;;
+esac
+
+if printf '%s\n' "$subject" | grep -Eq '^(feat|fix|docs|style|refactor|perf|test|build|ci|chore|revert)(\([^)]+\))?!?: .+'; then
+    exit 0
+fi
+
+cat >&2 <<EOF
+commit-msg: subject is not a Conventional Commit:
+    $subject
+Expected: <type>(<optional scope>): <description>
+Types:    feat fix docs style refactor perf test build ci chore revert
+Example:  fix(weather): recalculate forecast index offsets
+EOF
+exit 1

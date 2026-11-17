@@ -1,0 +1,38 @@
+# git-cliff config: GitHub release notes built from Conventional Commits.
+# Used by .github/workflows/release.yml (orhun/git-cliff-action).
+# Preview locally: git cliff <previous-tag>..HEAD --tag vX.Y.Z
+
+[changelog]
+header = ""
+body = """
+{% for group, commits in commits | group_by(attribute="group") %}
+### {{ group | striptags | trim }}
+{% for commit in commits %}
+- {% if commit.scope %}**{{ commit.scope }}:** {% endif %}\
+{% if commit.breaking %}**[breaking]** {% endif %}\
+{{ commit.message | upper_first }}\
+{% endfor %}
+{% endfor %}
+"""
+footer = ""
+trim = true
+
+[git]
+conventional_commits = true
+# Drop pre-rebrand commits like "Weather fix" that don't follow the convention.
+filter_unconventional = true
+split_commits = false
+protect_breaking_commits = true
+# Only user-facing changes reach the release notes; everything else is skipped.
+commit_parsers = [
+  { message = "^feat", group = "<!-- 0 -->Features" },
+  { message = "^fix", group = "<!-- 1 -->Bug fixes" },
+  { message = "^perf", group = "<!-- 2 -->Performance" },
+  { message = "^refactor", group = "<!-- 3 -->Refactoring" },
+  { message = "^revert", group = "<!-- 4 -->Reverted" },
+  { message = ".*", skip = true },
+]
+tag_pattern = "v[0-9].*"
+# Pre-release tags (v1.2.0-rc.1) don't split history: their commits roll into the next stable release.
+ignore_tags = "v.*-.*"
+sort_commits = "oldest"

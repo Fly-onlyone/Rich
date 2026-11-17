@@ -1,0 +1,87 @@
+name: Release
+
+# Push a tag to publish:   git tag v1.1.0 && git push origin v1.1.0
+# A tag with a suffix (v1.1.0-rc.1) publishes a pre-release.
+on:
+  push:
+    tags: ["v*"]
+
+permissions:
+  contents: read
+
+jobs:
+  checks:
+    name: Checks
+    uses: ./.github/workflows/ci.yml
+
+  release:
+    name: Publish release
+    needs: checks
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          fetch-depth: 0
+          persist-credentials: false
+
+      - name: Validate tag
+        id: meta
+        env:
+          TAG: ${{ github.ref_name }}
+        run: |
+          if [[ ! "$TAG" =~ ^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.]+)?$ ]]; then
+            echo "::error::Tag '$TAG' is not vMAJOR.MINOR.PATCH[-prerelease]"
+            exit 1
+          fi
+          # Notes cover everything since the previous stable tag.
+          prev=$(git describe --tags --abbrev=0 --match 'v[0-9]*' --exclude '*-*' "${TAG}^" 2>/dev/null || true)
+          {
+            echo "version=${TAG#v}"
+            echo "range=${prev:+$prev..HEAD}"
+            if [[ "$TAG" == *-* ]]; then echo "prerelease=true"; else echo "prerelease=false"; fi
+          } >> "$GITHUB_OUTPUT"
+
+      - name: Stage package
+        shell: pwsh
+        env:
+          VERSION: ${{ steps.meta.outputs.version }}
+        run: ./script/build-package.ps1 -Version $env:VERSION
+
+      - name: Build .rmskin
+        id: rmskin
+        uses: 2bndy5/rmskin-action@v2.0.4
+        with:
+          path: dist/pkg
+          dir-out: dist
+
+      # A fixed asset name gives a stable link: releases/latest/download/Rich.rmskin
+      - name: Rename asset
+        env:
+          ARC: ${{ steps.rmskin.outputs.arc-name }}
+        run: mv "dist/$ARC" dist/Rich.rmskin
+
+      # The tag was validated above, so it is safe to pass in args.
+      - name: Release notes
+        uses: orhun/git-cliff-action@v4
+        with:
+          config: cliff.toml
+          args: ${{ steps.meta.outputs.range }} --tag ${{ github.ref_name }} --strip header
+        env:
+          OUTPUT: dist/CHANGES.md
+
+      - name: Publish GitHub release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ github.ref_name }}
+          VERSION: ${{ steps.meta.outputs.version }}
+          PRERELEASE: ${{ steps.meta.outputs.prerelease }}
+        run: |
+          flags=()
+          if [[ "$PRERELEASE" == "true" ]]; then flags+=(--prerelease); fi
+          gh release create "$TAG" dist/Rich.rmskin \
+            --verify-tag \
+            --title "Rich $VERSION" \
+            --notes-file dist/CHANGES.md \
+            "${flags[@]}"
