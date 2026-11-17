@@ -23,7 +23,7 @@ N/A (Rainmeter plugin DLL)
 ## Gotchas
 - `% Idle Time` is a well-behaved 0–100 counter; the old `% Disk Time` overflowed past 100.
 - Disk and processor categories expose multiple instances — pin `Name=` (`_Total`) or the reading is an arbitrary instance, not the system total.
-- The plugin DLL must be bundled in the `.rmskin` or the Monitor widget fails to load.
+- UsageMonitor ships with Rainmeter, so it is not bundled in the `.rmskin`; the installer skips it.
 
 ## See also
 - [[_index]]

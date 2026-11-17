@@ -21,7 +21,7 @@ N/A (Rainmeter plugin DLL)
 
 ## Gotchas
 - The plugin reports nothing when no supported player is running; the widget should handle the empty state.
-- The plugin DLL must be bundled in the `.rmskin` or the Music widget fails to load.
+- Third-party: the 32- and 64-bit DLLs are bundled in the `.rmskin` from `packaging/Plugins/MediaPlayer/`; without them the Music widget fails to load. See [[Packaging a rmskin]].
 
 ## See also
 - [[_index]]

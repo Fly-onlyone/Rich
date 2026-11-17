@@ -72,6 +72,15 @@ So far we support 4 languages
 |<img src="https://github.com/yammadev/flag-icons/blob/master/png/US@2x.png?raw=true" width="20px" />| English |
 |<img src="https://github.com/yammadev/flag-icons/blob/master/png/DE@2x.png?raw=true" width="20px" />| German |
 
+## Development
+
+Requires [PowerShell 7](https://github.com/PowerShell/PowerShell).
+
+- **Checks:** `pwsh script/test-skin.ps1` validates encodings, duplicate keys and sections, `@Include` targets, translations and bundled plugins. CI runs it on every push.
+- **Hooks:** `git config core.hooksPath .githooks` runs the checks before each commit and enforces [Conventional Commits](https://www.conventionalcommits.org/), which the release notes are built from.
+- **Package:** `pwsh script/build-package.ps1 -Version 1.2.0` writes `dist/Rich_1.2.0.rmskin`.
+- **Release:** `git tag v1.2.0 && git push origin v1.2.0` builds `Rich.rmskin` and publishes a GitHub release with generated notes.
+
 ## Special thanks
 
 | User | Credit |

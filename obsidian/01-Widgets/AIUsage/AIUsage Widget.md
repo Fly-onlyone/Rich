@@ -40,7 +40,7 @@ The data pipeline avoids any `!Refresh` loop:
 
 ## Gotchas
 
-- `RunCommand.dll` is **not** bundled with Rainmeter — it must be added to the `.rmskin` package, like the pack's other third-party plugins.
+- `RunCommand.dll` ships with Rainmeter (4.5+), so it is not bundled in the `.rmskin`.
 - `AIUsage.png` is the dedicated 50 × 50 dark glass usage-bars icon used by the Settings UI and `README.md`; regenerate it from `icon-prompt.md` if the design changes.
 - The Claude `oauth/usage` endpoint is **undocumented** — it can rate-limit or change without notice; the widget reads the Claude OAuth credential every refresh (a consideration before distributing the pack).
 - Codex support was removed: the widget, parser and data line are Claude-only. A stale `@Resources/AIUsage-codex-cache.json` left from older versions is unused and safe to delete.

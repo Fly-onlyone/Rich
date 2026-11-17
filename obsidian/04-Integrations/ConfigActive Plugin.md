@@ -25,7 +25,7 @@ N/A (Rainmeter plugin DLL)
 
 ## Gotchas
 - `ConfigName` must match the config's folder path exactly, or the measure always reports `0`.
-- The plugin DLL must be bundled in the `.rmskin` or the settings tabs fail to load.
+- Third-party: the 32- and 64-bit DLLs are bundled in the `.rmskin` from `packaging/Plugins/ConfigActive/`; without them the settings tabs fail to load. See [[Packaging a rmskin]].
 
 ## See also
 - [[_index]]

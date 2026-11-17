@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this is
 
-**Rich for Rainmeter** — a macOS-style widget pack for Windows, built entirely as a [Rainmeter](https://www.rainmeter.net/) skin. There is **no compiler, build system, package manager, or test suite**. The repo is a tree of Rainmeter config files (`.ini` / `.inc`), Lua scripts, images, fonts, and localization files that Rainmeter loads and renders directly.
+**Rich for Rainmeter** — a macOS-style widget pack for Windows, built entirely as a [Rainmeter](https://www.rainmeter.net/) skin. There is **no compiler or package manager**. The repo is a tree of Rainmeter config files (`.ini` / `.inc`), Lua scripts, images, fonts, and localization files that Rainmeter loads and renders directly. Static checks and packaging are two PowerShell 7 scripts in `script/` (see below).
 
 The `.idea/` folder just means the repo was opened in IntelliJ — this is **not** a Java project; ignore those files (`palantir-java-format.xml` etc. are irrelevant). The pack is **Rich**, a rebrand of the upstream `creewick/MontereyRainmeter`.
 
@@ -12,15 +12,18 @@ The `.idea/` folder just means the repo was opened in IntelliJ — this is **not
 
 A full developer knowledge base lives in [`obsidian/`](./obsidian/_HOME.md) — a graph-linked Obsidian vault of ~150 atomic notes covering architecture flows, every widget, the shared framework, conventions, integrations, and operations. **Start at `obsidian/_HOME.md`.** It is the source of truth for cross-cutting behavior the code does not make obvious; consult the relevant note before changing a class of behavior, and update the matching note when you change it.
 
-## Working in this repo (no build/lint/test)
+## Working in this repo
 
 - **Run / test a change:** load the skin in Rainmeter and *Refresh* it (right-click → Refresh). Each `Widgets/<Name>/<Size>.ini`, each `Extras/*/*.ini`, and the root `Settings.ini` is an independent Rainmeter "config" loaded and refreshed on its own.
+- **Check a change (the project's lint):** `pwsh script/test-skin.ps1`. It reports `path:line: [check] message` for: encoding (UTF-16 LE with BOM, or BOM-less pure ASCII), duplicate keys and duplicate `[Section]`s, missing static `@Include` targets, i18n key parity against `en`, third-party plugins missing from `packaging/Plugins`, committed secrets/caches, broken vault wikilinks, plus luacheck and PSScriptAnalyzer when installed. CI (`.github/workflows/ci.yml`) runs it, luacheck and a gitleaks scan on every push. Hooks: `git config core.hooksPath .githooks` (pre-commit runs the checks on staged files; commit-msg enforces Conventional Commits).
 - **Debug API/data issues:** several configs ship a parallel `*Debug` WebParser measure (e.g. `OpenMeteoParserDebug`, `UpdateCityDebug`) whose `FinishAction` dumps the raw response to the Rainmeter log via `!Log`. Read it in Rainmeter → *About* → *Log*.
-- **Distribution:** end users install a `.rmskin` package built with Rainmeter's Skin Packager. No packager config and no `.rmskin` are committed to the repo.
+- **Package:** `pwsh script/build-package.ps1 -Version <v>` writes `dist/Rich_<v>.rmskin` from **tracked** files only, stamps `<v>` into every `[Metadata] Version=` (never bump those by hand), and generates `RMSKIN.ini` whose `VariableFiles` lists every `@Resources/Variables/*.inc` so upgrades keep users' settings. It packs the archive itself because `rmskin-builder`/`rmskin-action` escape the backslashes in `RMSKIN.ini`. Don't test-install on a machine whose `Skins\Rich` is a junction to the repo; the installer moves it to `@Backup`.
+- **Release:** push a `vX.Y.Z` tag. `.github/workflows/release.yml` runs CI, builds `Rich.rmskin`, writes notes from the Conventional Commits since the last stable tag (`cliff.toml`), and publishes a GitHub release (a `-suffix` tag publishes a pre-release).
+- **Plugins:** the six third-party DLLs (AppVolume, Chameleon, ConfigActive, FrostedGlass, MediaPlayer, TrayIcon) live in `packaging/Plugins/<Name>/{32bit,64bit}/`. A new third-party `Plugin=` must be added there. Plugins that ship with Rainmeter 4.5 (ActionTimer, InputText, PowerPlugin, RunCommand, UsageMonitor, Win7AudioPlugin, …) are never bundled.
 
 ## File encoding — important
 
-Most `.ini` / `.inc` files are **UTF-16 LE with BOM** (Rainmeter's native encoding); a few newer ones (e.g. `Widgets/Weather/Settings.ini`) are UTF-8. When editing, **preserve each file's existing encoding** — saving a UTF-16 skin file as UTF-8 (or vice versa) can break how Rainmeter parses it. Check the encoding per file before editing.
+Most `.ini` / `.inc` / `.lua` files are **UTF-16 LE with BOM** (Rainmeter's native encoding); the rest (e.g. `Widgets/Weather/Settings.ini`) have no BOM and must stay **pure ASCII**, because Rainmeter reads a BOM-less file as ANSI, not UTF-8. Even a typographic dash in a comment counts. The same applies to `AIUsage.ps1`, which runs under Windows PowerShell 5.1. When editing, **preserve each file's existing encoding**: saving a UTF-16 skin file as UTF-8 (or vice versa) can break how Rainmeter parses it. Check the encoding per file before editing; `script/test-skin.ps1` enforces the rule.
 
 ## Architecture — the include cascade
 
@@ -47,7 +50,7 @@ Widgets/<Name>/<Size>.ini
 @Resources/Scripts/Includes/Context.inc + Scripts/Contexts/Widget.inc   right-click menu
 ```
 
-So **palette, effect, size, and language are all selected by variables** (`Palette`, `Theme`, `WidgetSize`, `Language`) and applied uniformly by swapping which include file is pulled in. To change behavior across every widget, edit the shared include — not each widget. Note: `@IncludeN` numbers must be unique within a `[Variables]` section; a reused number silently overrides the earlier include.
+So **palette, effect, size, and language are all selected by variables** (`Palette`, `Theme`, `WidgetSize`, `Language`) and applied uniformly by swapping which include file is pulled in. To change behavior across every widget, edit the shared include — not each widget. Note: `@IncludeN` numbers must be unique within a `[Variables]` section; a reused number silently overrides the earlier include. Likewise a `[Section]` declared twice in one file is merged by Rainmeter into **one** section, so two meters sharing a name become one meter with clashing keys. Give every meter a unique name.
 
 ## Directory layout
 
@@ -88,7 +91,7 @@ Weather uses the free **Open-Meteo** API — no key required. `@Resources/Variab
 
 The **AIUsage** widget (`Widgets/AIUsage/`) shows how much of **Claude's** **5-hour rolling** and **7-day** rate-limit budget **remains**. It is Claude-only — there is no provider switch, and the right-click menu is the standard widget menu (`Scripts/Contexts/Widget.inc`). It draws two rounded `Shape` bars with a near-cap warning colour.
 
-- **Parser:** `@Resources/Scripts/Widgets/AIUsage.ps1` (PowerShell) reads Claude's live usage endpoint and writes a flat `@Resources/AIUsageData.txt` line. It is run by the **RunCommand** plugin — `[MeasureRun]` in `Scripts/Widgets/AIUsage.inc` — once on load and every `#AIUsageRefreshSeconds#` (default `900`). `RunCommand.dll` is **not** bundled with Rainmeter; it must be added to the `.rmskin` package.
+- **Parser:** `@Resources/Scripts/Widgets/AIUsage.ps1` (PowerShell) reads Claude's live usage endpoint and writes a flat `@Resources/AIUsageData.txt` line. It is run by the **RunCommand** plugin — `[MeasureRun]` in `Scripts/Widgets/AIUsage.inc` — once on load and every `#AIUsageRefreshSeconds#` (default `900`). `RunCommand.dll` ships with Rainmeter 4.5+, so it is not bundled in the `.rmskin`.
 - **Read-back:** `[MeasureData]` (WebParser, `file://`) parses the `claude5|claude7|claude5r|claude7r|claudeerr` line; five `Group=AIData` child measures (`StringIndex` 1–5) + `Group=AICalc` `Calc` measures derive *remaining* (`100 − used`). Meters bind directly to the Claude measures (e.g. `MeasureName=MeasureClaude5Left`, fill colour `#Claude5Color#`). No run/refresh loop.
 - **Claude:** `AIUsage.ps1` reads **account-wide** usage live from Anthropic's undocumented `/api/oauth/usage` endpoint (`five_hour`/`seven_day` → `utilization` + ISO `resets_at`), authenticating with the OAuth token from `~/.claude/.credentials.json` (`Bearer` + `anthropic-beta: oauth-2025-04-20`). Reflects Claude Code, Claude Desktop **and** claude.ai web, and works with Claude Code closed. The endpoint 429s aggressively, so each good reading is cached to `@Resources/AIUsage-claude-cache.json` — while throttled the widget shows that cached value (reset countdowns re-derived from the stored timestamps). Only with no cache does Claude show unavailable (`MeasureActiveErr` → `ActiveErr`/`ActiveOk`). The widget reads the OAuth credential each refresh — a consideration before distributing the pack.
 - Threshold colours (`Green`/`Yellow`/`RedColor`, `YellowStarts`/`RedStarts`) live in `Variables/AIUsage.inc`, mirroring `Monitor.inc`. Colour keys off *used* %, so a near-empty *remaining* bar turns red.

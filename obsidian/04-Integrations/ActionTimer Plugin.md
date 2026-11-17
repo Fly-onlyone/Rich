@@ -26,7 +26,7 @@ N/A (Rainmeter plugin DLL)
 
 ## Gotchas
 - The widgets pick `ActionList1` vs `ActionList2` via `[&ActionList]`, which is `1 + #BatterySaverMode#` — battery saver mode skips the animation and snaps instantly.
-- The plugin DLL must be bundled in the `.rmskin` or animated widgets fail to load.
+- ActionTimer ships with Rainmeter (4.5+), so it is not bundled in the `.rmskin`; the installer skips it.
 
 ## See also
 - [[_index]]

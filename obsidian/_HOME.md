@@ -10,8 +10,9 @@ or patterns as needed.
 
 > **Rich for Rainmeter** is a macOS-style widget pack for Windows, built entirely as
 > a [Rainmeter](https://www.rainmeter.net/) skin — a tree of declarative `.ini`/`.inc`
-> config files (mostly UTF-16 LE) plus three Lua scripts. There is no compiler and no
-> test suite; Rainmeter loads and renders the files directly. The hard part is invisible
+> config files (mostly UTF-16 LE) plus a few Lua scripts. There is no compiler;
+> Rainmeter loads and renders the files directly, and `script/test-skin.ps1` statically
+> checks them. The hard part is invisible
 > in any single file: a widget is *composed at load time* by a cascade of `@Include`
 > directives that splice in theme, size, language, and per-widget logic.
 
@@ -83,4 +84,4 @@ The shared `@Resources` machinery every widget depends on. → [[02-Framework/_i
 
 **Localization:** [[Localization Flow]] → [[Localization Token Pattern]] → [[Adding a New Language]]
 
-**Operations / packaging:** [[Update & Refresh Model]] → [[Loading & Refreshing Skins]] → [[Reading the Rainmeter Log]] → [[Packaging a rmskin]]
+**Operations / packaging:** [[Update & Refresh Model]] → [[Loading & Refreshing Skins]] → [[Reading the Rainmeter Log]] → [[Static Checks]] → [[Packaging a rmskin]]

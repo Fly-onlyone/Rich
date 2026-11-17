@@ -26,7 +26,7 @@ N/A (Rainmeter plugin DLL)
 
 ## Gotchas
 - `$UserInput$` is only valid inside the `CommandN` keys; referencing it elsewhere yields the literal string.
-- The plugin DLL must be bundled in the `.rmskin` or any widget with input fields fails to load.
+- InputText ships with Rainmeter, so it is not bundled in the `.rmskin`; the installer skips it.
 
 ## See also
 - [[_index]]

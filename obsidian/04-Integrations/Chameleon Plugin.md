@@ -27,7 +27,7 @@ N/A (Rainmeter plugin DLL)
 
 ## Gotchas
 - Child measures must set `Parent=ChameleonMeasure`; a stray measure without a parent re-samples the desktop independently.
-- The plugin DLL must be bundled in the `.rmskin` or all themes break.
+- Third-party: the 32- and 64-bit DLLs are bundled in the `.rmskin` from `packaging/Plugins/Chameleon/`; without them all themes break. See [[Packaging a rmskin]].
 
 ## See also
 - [[_index]]

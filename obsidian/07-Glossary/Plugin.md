@@ -7,10 +7,11 @@ tags: [glossary]
 > A `.dll` that adds [[Measure]] (or meter) types beyond Rainmeter's built-ins, used via
 > `Measure=Plugin` + `Plugin=<Name>`.
 
-Rich ships with eleven plugins for things core Rainmeter cannot do — blur, color
-sampling, audio control, system metrics, text input. They are catalogued in
-[[04-Integrations/_index|Integrations]]. Plugins must be bundled in the `.rmskin` or the
-dependent widgets fail to load.
+Rich uses a dozen plugins for things core Rainmeter cannot do — blur, color sampling,
+audio control, system metrics, text input. They are catalogued in
+[[04-Integrations/_index|Integrations]]. Six are third-party (AppVolume, Chameleon,
+ConfigActive, FrostedGlass, MediaPlayer, TrayIcon) and are bundled in the `.rmskin` from
+`packaging/Plugins`; the rest ship with Rainmeter. See [[Packaging a rmskin]].
 
 ## See also
 

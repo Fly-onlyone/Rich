@@ -26,6 +26,8 @@ Checklist, modelled on an existing widget:
 5. Add a default size entry to `@Resources/Variables/Layout.inc`.
 6. Add an icon to `@Resources/Images/Icons/` and a row to the
    [[Widgets Settings Tab]] list.
+7. Run `pwsh script/test-skin.ps1` (see [[Static Checks]]). A third-party plugin also
+   needs its DLLs in `packaging/Plugins/` (see [[Packaging a rmskin]]).
 
 ## Gotchas
 

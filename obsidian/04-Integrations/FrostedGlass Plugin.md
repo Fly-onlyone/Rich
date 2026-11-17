@@ -22,7 +22,7 @@ N/A (Rainmeter plugin DLL)
 
 ## Gotchas
 - Used only by the Blur theme; the Light, Dark, Auto, and Color themes never declare it.
-- The plugin DLL must be bundled in the `.rmskin`, or the Blur theme fails to load.
+- Third-party: the 32- and 64-bit DLLs are bundled in the `.rmskin` from `packaging/Plugins/FrostedGlass/`; without them the Blur theme fails to load. See [[Packaging a rmskin]].
 
 ## See also
 - [[_index]]

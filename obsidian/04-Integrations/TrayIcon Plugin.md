@@ -22,7 +22,7 @@ N/A (Rainmeter plugin DLL)
 
 ## Gotchas
 - Only one tray icon per skin instance; the Sidebar is the single host.
-- The plugin DLL must be bundled in the `.rmskin` or the Sidebar extra fails to load.
+- Third-party: the 32- and 64-bit DLLs are bundled in the `.rmskin` from `packaging/Plugins/TrayIcon/`; without them the Sidebar extra fails to load. See [[Packaging a rmskin]].
 
 ## See also
 - [[_index]]
