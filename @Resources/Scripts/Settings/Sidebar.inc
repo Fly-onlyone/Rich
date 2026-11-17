@@ -184,7 +184,7 @@ Shape=Rectangle 0,0,#WidgetWidth#,#WidgetHeight# | Fill Color 80808060 | StrokeW
 Hidden=([&EffectAsNumber] = 4)
 DynamicVariables=1
 
-[SidebarMeter]
+[SidebarMeterBlur]
 Meter=Shape
 Container=Container
 Shape=Rectangle 0,0,#WidgetWidth#,#WidgetHeight# | Fill Color #BackgroundColor#60 | StrokeWidth 0.5 | Stroke Color 808080
