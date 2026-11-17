@@ -21,8 +21,11 @@ tags: [operations, release]
 1. Copies the **tracked** files of `@Resources/`, `Widgets/`, `Extras/`, `Settings.ini`
    and `LICENSE` into `Skins/Rich/`. Gitignored local files (`Secrets.inc`, the AI
    Usage caches) never ship.
-2. Stamps the version into every `[Metadata] Version=` of the staged copies, in each
-   file's own encoding. The repo's `Version=` keys are never edited by hand.
+2. Stamps the version into every `[Metadata] Version=` of the staged copies and into
+   `RichVersion=` in `Scripts/Settings/About.inc` (shown on the About page; `dev` in the
+   repo), in each file's own encoding. None of these are edited by hand. `RichVersion`
+   must stay out of `Variables/*.inc`: those are `VariableFiles`, so an upgrade would
+   carry the old version over the new one.
 3. Copies the plugins to `Plugins/{32bit,64bit}/`, checking that each DLL's PE header
    matches its folder.
 4. Generates `RMSKIN.ini`: `Load=Rich\Settings.ini` (the settings panel opens after
