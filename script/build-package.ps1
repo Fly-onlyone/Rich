@@ -1,15 +1,17 @@
 #Requires -Version 7.0
 <#
 .SYNOPSIS
-    Stages the Rich .rmskin package contents for rmskin-builder.
+    Builds the Rich .rmskin package.
 
 .DESCRIPTION
-    Builds <OutDir>/pkg in the layout rmskin-builder (2bndy5/rmskin-action) expects:
+    Stages <OutDir>/pkg with exactly the layout Rainmeter's skin installer reads,
+    then packs it into <OutDir>/<ArchiveName>:
 
-      RMSKIN.ini                               generated, see below
-      Skins/Rich/...                           tracked skin files only (git ls-files),
-                                               so local secrets and runtime caches never ship
-      Plugins/<Name>/{32bit,64bit}/<Name>.dll  copied from packaging/Plugins
+      RMSKIN.ini                       generated, see below
+      Skins/Rich/...                   tracked skin files only (git ls-files),
+                                       so local secrets and runtime caches never ship
+      Plugins/{32bit,64bit}/<Name>.dll from packaging/Plugins/<Name>/<arch>/; each
+                                       DLL's PE header must match its arch folder
 
     The release version is stamped into the [Metadata] Version= key of every
     staged .ini, written back in that file's own encoding (UTF-16 LE or ASCII).
@@ -19,15 +21,23 @@
     an upgrade keeps the user's saved settings: for each [Variables] key present
     in both the old and new file, the installer carries the old value over.
 
-    Turn the staged folder into a .rmskin with rmskin-builder:
-      CI:    2bndy5/rmskin-action  (path: dist/pkg)
-      Local: pip install rmskin-builder; rmskin-builder --path dist/pkg --dir-out dist
+    The .rmskin format matches Rainmeter's own Skin Packager: a zip (no directory
+    entries, '/' separators) followed by a 16-byte footer, the zip size as a
+    little-endian UInt64 and then "\0RMSKIN\0". The archive is built here rather
+    than with rmskin-builder because that tool rewrites RMSKIN.ini with escaped
+    backslashes (Load=Rich\\Settings.ini), which Rainmeter reads literally.
+
+    In GitHub Actions the archive path and file name are written to
+    $GITHUB_OUTPUT as `archive` and `name`.
 
 .PARAMETER Version
     Package version, e.g. 1.1.0 (release) or dev-1a2b3c4 (CI build).
 
 .PARAMETER OutDir
     Output folder, relative to the repo root unless absolute. Default: dist.
+
+.PARAMETER ArchiveName
+    File name of the .rmskin. Default: Rich_<Version>.rmskin.
 
 .EXAMPLE
     pwsh script/build-package.ps1 -Version 1.1.0
@@ -38,7 +48,10 @@ param(
     [ValidatePattern('^[0-9A-Za-z][0-9A-Za-z.+-]*$')]
     [string]$Version,
 
-    [string]$OutDir = 'dist'
+    [string]$OutDir = 'dist',
+
+    [ValidatePattern('^[\w.+-]+\.rmskin$')]
+    [string]$ArchiveName
 )
 
 Set-StrictMode -Version Latest
@@ -94,9 +107,21 @@ foreach ($ini in (Get-ChildItem -LiteralPath $skinRoot -Recurse -File -Filter '*
     }
 }
 
-# 3. Plugins.
-$plugins = @(Get-ChildItem -LiteralPath (Join-Path $RepoRoot 'packaging/Plugins') -Directory)
-Copy-Item -LiteralPath (Join-Path $RepoRoot 'packaging/Plugins') -Destination (Join-Path $pkg 'Plugins') -Recurse
+# 3. Plugins: packaging/Plugins/<Name>/<arch>/<Name>.dll -> Plugins/<arch>/<Name>.dll.
+$machineArch = @{ 0x014C = '32bit'; 0x8664 = '64bit' }
+$pluginSource = Join-Path $RepoRoot 'packaging/Plugins'
+$plugins = @(Get-ChildItem -LiteralPath $pluginSource -Directory)
+foreach ($dll in (Get-ChildItem -LiteralPath $pluginSource -Recurse -File -Filter '*.dll')) {
+    $arch = $dll.Directory.Name
+    $pe = [IO.File]::ReadAllBytes($dll.FullName)
+    $machine = [int][BitConverter]::ToUInt16($pe, [BitConverter]::ToInt32($pe, 0x3C) + 4)
+    if ($machineArch[$machine] -ne $arch) {
+        throw "$($dll.FullName): PE machine 0x$('{0:X4}' -f $machine) does not match folder '$arch'."
+    }
+    $dest = Join-Path $pkg "Plugins/$arch"
+    New-Item -ItemType Directory -Force -Path $dest | Out-Null
+    Copy-Item -LiteralPath $dll.FullName -Destination (Join-Path $dest $dll.Name)
+}
 
 # 4. RMSKIN.ini.
 $variableFiles = @(git -c core.quotepath=off ls-files -- '@Resources/Variables/*.inc' |
@@ -113,8 +138,38 @@ $rmskin = @(
     "VariableFiles=$($variableFiles -join ' | ')"
 ) -join "`r`n"
 [IO.File]::WriteAllText((Join-Path $pkg 'RMSKIN.ini'), "$rmskin`r`n", $utf8)
+if (-not (Test-Path -LiteralPath (Join-Path $pkg ('Skins/' + ($LoadSkin -replace '\\', '/'))) -PathType Leaf)) {
+    throw "Load target '$LoadSkin' is not in the package."
+}
 
-Write-Output "Staged $PackageName $Version in $pkg"
+# 5. The .rmskin: zip of the staged folder (RMSKIN.ini first) + 16-byte footer.
+Add-Type -AssemblyName System.IO.Compression, System.IO.Compression.FileSystem
+if (-not $ArchiveName) { $ArchiveName = "${PackageName}_$Version.rmskin" }
+$archivePath = Join-Path $outRoot $ArchiveName
+$entries = @(Get-ChildItem -LiteralPath $pkg -Recurse -File |
+    ForEach-Object { [pscustomobject]@{ Path = $_.FullName; Name = [IO.Path]::GetRelativePath($pkg, $_.FullName) -replace '\\', '/' } } |
+    Sort-Object @{ Expression = { $_.Name -ne 'RMSKIN.ini' } }, Name)
+$buffer = [IO.MemoryStream]::new()
+$zip = [IO.Compression.ZipArchive]::new($buffer, [IO.Compression.ZipArchiveMode]::Create, $true)
+try {
+    foreach ($entry in $entries) {
+        [void][IO.Compression.ZipFileExtensions]::CreateEntryFromFile($zip, $entry.Path, $entry.Name, [IO.Compression.CompressionLevel]::Optimal)
+    }
+}
+finally {
+    $zip.Dispose()
+}
+$footer = [byte[]]::new(16)
+[BitConverter]::GetBytes([uint64]$buffer.Length).CopyTo($footer, 0)
+[Text.Encoding]::ASCII.GetBytes("`0RMSKIN`0").CopyTo($footer, 8)
+$buffer.Write($footer, 0, $footer.Length)
+[IO.File]::WriteAllBytes($archivePath, $buffer.ToArray())
+
+if ($env:GITHUB_OUTPUT) {
+    Add-Content -LiteralPath $env:GITHUB_OUTPUT -Value "archive=$archivePath", "name=$ArchiveName"
+}
+
+Write-Output "Built $archivePath ($([math]::Round($buffer.Length / 1MB, 2)) MB, $($entries.Count) entries)"
 Write-Output "  $($files.Count) skin files, Version= stamped in $stamped .ini files"
 Write-Output "  $($plugins.Count) plugins: $(($plugins.Name | Sort-Object) -join ', ')"
 Write-Output "  VariableFiles: $($variableFiles.Count) files"

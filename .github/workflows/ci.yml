@@ -64,20 +64,14 @@ jobs:
         with:
           persist-credentials: false
 
-      - name: Stage package
+      - name: Build .rmskin
+        id: package
         shell: pwsh
         run: ./script/build-package.ps1 -Version "dev-$($env:GITHUB_SHA.Substring(0, 7))"
 
-      - name: Build .rmskin
-        id: rmskin
-        uses: 2bndy5/rmskin-action@v2.0.4
-        with:
-          path: dist/pkg
-          dir-out: dist
-
       - uses: actions/upload-artifact@v7
         with:
-          name: ${{ steps.rmskin.outputs.arc-name }}
-          path: dist/*.rmskin
+          name: ${{ steps.package.outputs.name }}
+          path: ${{ steps.package.outputs.archive }}
           if-no-files-found: error
           retention-days: 14

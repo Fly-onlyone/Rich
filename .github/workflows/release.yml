@@ -43,24 +43,12 @@ jobs:
             if [[ "$TAG" == *-* ]]; then echo "prerelease=true"; else echo "prerelease=false"; fi
           } >> "$GITHUB_OUTPUT"
 
-      - name: Stage package
+      # A fixed asset name gives a stable link: releases/latest/download/Rich.rmskin
+      - name: Build .rmskin
         shell: pwsh
         env:
           VERSION: ${{ steps.meta.outputs.version }}
-        run: ./script/build-package.ps1 -Version $env:VERSION
-
-      - name: Build .rmskin
-        id: rmskin
-        uses: 2bndy5/rmskin-action@v2.0.4
-        with:
-          path: dist/pkg
-          dir-out: dist
-
-      # A fixed asset name gives a stable link: releases/latest/download/Rich.rmskin
-      - name: Rename asset
-        env:
-          ARC: ${{ steps.rmskin.outputs.arc-name }}
-        run: mv "dist/$ARC" dist/Rich.rmskin
+        run: ./script/build-package.ps1 -Version $env:VERSION -ArchiveName Rich.rmskin
 
       # The tag was validated above, so it is safe to pass in args.
       - name: Release notes
