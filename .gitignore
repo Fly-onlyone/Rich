@@ -17,3 +17,7 @@ obsidian/_Attachments/
 
 # Claude Code worktrees (EnterWorktree) — isolated checkouts, never committed.
 .claude/worktrees/
+
+# Package build output (script/build-package.ps1) and CI scratch (UTF-8 Lua copies).
+dist/
+.ci/

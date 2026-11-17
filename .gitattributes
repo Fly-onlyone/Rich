@@ -1,0 +1,5 @@
+# Plugin binaries bundled into the .rmskin (packaging/Plugins).
+*.dll binary
+
+# Git runs hooks with sh: keep LF line endings on every platform.
+.githooks/* text eol=lf
