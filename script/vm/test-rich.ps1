@@ -20,6 +20,8 @@ param(
     [string]$User = "Software Tester",
     [string]$Password = "",
     [string]$Snapshot = "Clean",
+    # Startup memory for this run, in MB, when the host cannot spare the VM's own (restored afterwards).
+    [int]$MemoryMb,
     [switch]$KeepRunning,
     # Multiplies every wait; raise it on a slow host.
     [double]$Pace = 1.0
@@ -122,6 +124,8 @@ if (Test-Path `$ini) {
 }
 `$palette = `$null
 if (Test-Path '$guestGlobal') { `$palette = (Get-Content '$guestGlobal' | Where-Object { `$_ -match '^Palette=' } | Select-Object -First 1) -replace '^Palette=', '' }
+`$aboutVersion = `$null
+if (Test-Path (Join-Path `$rich '@Resources\Scripts\Settings\About.inc')) { `$aboutVersion = (Get-Content (Join-Path `$rich '@Resources\Scripts\Settings\About.inc') | Where-Object { `$_ -match '^RichVersion=' } | Select-Object -First 1) -replace '^RichVersion=', '' }
 `$version = `$null
 if (Test-Path (Join-Path `$rich 'Settings.ini')) { `$version = (Get-Content (Join-Path `$rich 'Settings.ini') | Where-Object { `$_ -match '^Version=' } | Select-Object -First 1) -replace '^Version=', '' }
 `$logProblems = @()
@@ -136,6 +140,7 @@ if (Test-Path `$log) { `$logProblems = @(Get-Content `$log | Where-Object { `$_ 
     skinsFolder  = Test-Path `$skins
     richFiles    = @(Get-ChildItem `$rich -Recurse -File -ErrorAction SilentlyContinue).Count
     version      = `$version
+    aboutVersion = `$aboutVersion
     plugins      = @(Get-ChildItem (Join-Path `$settings 'Plugins') -Filter *.dll -ErrorAction SilentlyContinue | ForEach-Object { "`$(`$_.BaseName) `$(Get-Machine `$_.FullName) `$(`$_.VersionInfo.FileVersion)" })
     activeRich   = `$active
     palette      = `$palette
@@ -216,8 +221,11 @@ Test-Case "A1" "Package contents" "RMSKIN.ini, Skins/Rich and both builds of the
 
 # ---------------------------------------------------------------- guest up
 "restoring checkpoint '$Snapshot'"
+$originalStartup = (Get-VMMemory -VMName $VmName).Startup
 try {
     Restore-Guest -Snapshot $Snapshot
+    # A restore brings back the checkpoint's memory size, so the override goes after it.
+    if ($MemoryMb) { Set-VMMemory -VMName $VmName -StartupBytes ([int64]$MemoryMb * 1MB); "startup memory set to $MemoryMb MB for this run" }
     Initialize-HostMemory
     Start-Guest
     Wait-Guest -TimeoutSec 900
@@ -255,9 +263,10 @@ try {
         if (-not $facts.richFiles) { $problems += "no Skins\Rich" }
         if (-not $facts.running) { $problems += "Rainmeter is not running" }
         if ($facts.installer) { $problems += "the installer dialog is still open" }
+        if ($facts.aboutVersion -ne $facts.version) { $problems += "the About page version is '$($facts.aboutVersion)', the package is '$($facts.version)'" }
         Add-Result -Id "C1" -Title "Run Rich.rmskin (README step 3)" -Expect "Rich and the six plugins install; Rainmeter restarts" `
             -Status $(if ($problems) { "fail" } else { "pass" }) -Shots @($install.Dialog, $install.After) -Output ($facts.plugins -join "`n") `
-            -Observed "Rich files: $($facts.richFiles); version $($facts.version); plugins: $($facts.plugins.Count) ($(($facts.plugins | ForEach-Object { ($_ -split ' ')[0] }) -join ', ')); $(if ($problems) { $problems -join '; ' } else { 'all present' })"
+            -Observed "Rich files: $($facts.richFiles); version $($facts.version); About page version $($facts.aboutVersion); plugins: $($facts.plugins.Count) ($(($facts.plugins | ForEach-Object { ($_ -split ' ')[0] }) -join ', ')); $(if ($problems) { $problems -join '; ' } else { 'all present' })"
     }
 
     # ---------------------------------------------------------------- D, use
@@ -337,6 +346,7 @@ try {
 } finally {
     Stop-Recording
     if (-not $KeepRunning) { Stop-Guest }
+    if ($MemoryMb -and (Get-VM -Name $VmName).State -eq 'Off') { Set-VMMemory -VMName $VmName -StartupBytes $originalStartup }
 }
 Get-VM -Name $VmName | Select-Object Name, Generation, ProcessorCount, @{ n = "MemoryMb"; e = { $_.MemoryStartup / 1MB } }, Version |
     ConvertTo-Json | Set-Content (Join-Path $logs "vm.json")
