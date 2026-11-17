@@ -14,3 +14,6 @@ obsidian/_Attachments/
 @Resources/AIUsageData.txt
 @Resources/AIUsage-claude-cache.json
 @Resources/AIUsage-codex-cache.json
+
+# Claude Code worktrees (EnterWorktree) — isolated checkouts, never committed.
+.claude/worktrees/
